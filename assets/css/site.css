@@ -17,6 +17,11 @@
 
 * { box-sizing: border-box; }
 
+/* The [hidden] attribute must always win, even over display rules below
+ * (e.g. .chip { display: inline-flex }). Used to gate the tip jar until a
+ * URL is configured, and tool share panels until they have content. */
+[hidden] { display: none !important; }
+
 html, body { margin: 0; padding: 0; }
 
 body {

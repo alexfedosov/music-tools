@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Online Metronome — Free, Accurate Tempo Tool for Musicians</title>
+  <meta name="description" content="A free online metronome with rock-solid Web Audio timing. Set any BPM from 40–240, choose your time signature, accent the downbeat, and tap your tempo. No ads, no signup.">
+  <link rel="canonical" href="https://alexfedosov.github.io/music-tools/metronome/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="music·tools">
+  <meta property="og:title" content="Online Metronome — Free & Accurate">
+  <meta property="og:description" content="Rock-solid Web Audio timing. Any BPM, time signature, accent, and tap tempo. Free, no signup.">
+  <meta property="og:url" content="https://alexfedosov.github.io/music-tools/metronome/">
+  <meta property="og:image" content="https://alexfedosov.github.io/music-tools/assets/og/metronome.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Online Metronome — Free & Accurate">
+  <meta name="twitter:description" content="Rock-solid Web Audio timing. Any BPM, time signature, accent, and tap tempo. Free, no signup.">
+  <meta name="twitter:image" content="https://alexfedosov.github.io/music-tools/assets/og/metronome.png">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+
+  <!-- Structured data: a free WebApplication, plus breadcrumbs back to the hub -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Online Metronome",
+    "url": "https://alexfedosov.github.io/music-tools/metronome/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free online metronome with accurate Web Audio timing, adjustable BPM, time signatures, accent, and tap tempo.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "music·tools", "item": "https://alexfedosov.github.io/music-tools/" },
+      { "@type": "ListItem", "position": 2, "name": "Online Metronome", "item": "https://alexfedosov.github.io/music-tools/metronome/" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">music<span class="dot">·</span>tools</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Metronome</span>
+    </nav>
+
+    <section class="hero">
+      <h1>Online Metronome</h1>
+      <p class="lede">Rock-solid tempo, straight in your browser. Built on the Web Audio clock so the click never drifts — even with the tab in the background.</p>
+    </section>
+
+    <section class="metronome" aria-label="Metronome">
+      <div class="beat-row" id="beat-indicator" role="img" aria-label="Beat indicator"></div>
+
+      <div class="bpm-display">
+        <div class="value"><span id="bpm-value">120</span></div>
+        <div class="unit">BPM</div>
+      </div>
+
+      <div class="bpm-controls">
+        <button class="step-btn" id="bpm-decr" type="button" aria-label="Decrease tempo by 1 BPM">−</button>
+        <input type="range" id="bpm-slider" min="40" max="240" value="120" step="1" aria-label="Tempo in beats per minute">
+        <button class="step-btn" id="bpm-incr" type="button" aria-label="Increase tempo by 1 BPM">+</button>
+      </div>
+
+      <div class="transport">
+        <button class="play-btn" id="play-toggle" type="button" aria-pressed="false">Start</button>
+        <button class="tap-btn" id="tap-tempo" type="button">Tap</button>
+      </div>
+
+      <div class="settings">
+        <div class="field">
+          <label for="time-sig">Time signature</label>
+          <select id="time-sig">
+            <option value="1">1 / 4</option>
+            <option value="2">2 / 4</option>
+            <option value="3">3 / 4</option>
+            <option value="4" selected>4 / 4</option>
+            <option value="5">5 / 4</option>
+            <option value="6">6 / 8</option>
+            <option value="7">7 / 8</option>
+            <option value="9">9 / 8</option>
+            <option value="12">12 / 8</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="volume">Volume</label>
+          <input type="range" id="volume" min="0" max="1" value="0.9" step="0.01" aria-label="Click volume">
+        </div>
+        <div class="field checkbox">
+          <input type="checkbox" id="accent-toggle" checked>
+          <label for="accent-toggle">Accent the first beat</label>
+        </div>
+      </div>
+
+      <p class="hint">Press <kbd>Space</kbd> to start or stop. Tap the <strong>Tap</strong> button in time to set the tempo.</p>
+    </section>
+
+    <section class="share-bar" aria-label="Share this tool">
+      <span class="share-bar__label">Found this useful?</span>
+      <div class="share-bar__actions">
+        <button class="chip" type="button" data-copy-link>Copy link</button>
+        <a class="chip" href="https://twitter.com/intent/tweet?text=Free%20online%20metronome%20with%20rock-solid%20timing&url=https%3A%2F%2Falexfedosov.github.io%2Fmusic-tools%2Fmetronome%2F" target="_blank" rel="noopener">Share on X</a>
+        <a class="chip chip--tip" data-tip-jar href="#" target="_blank" rel="noopener" hidden>☕ Buy me a coffee</a>
+      </div>
+    </section>
+
+    <section class="prose">
+      <h2>Why this metronome stays in time</h2>
+      <p>Most browser metronomes fire their click from a JavaScript timer, which stutters whenever the page is busy. This one schedules every click ahead of time on the Web Audio hardware clock, so the beat lands exactly where it should — perfect for practising scales, tracking takes, or locking in a groove.</p>
+      <h2>How to use it</h2>
+      <p>Drag the tempo slider or use the − / + buttons to dial in your BPM. Pick a time signature to set how many beats are in each bar; the first beat is accented so you always know where the bar starts. Not sure of the tempo? Hit <strong>Tap</strong> along with a track and we'll work it out.</p>
+      <p>Need to match an existing song instead? Our dedicated <a href="../tap-tempo/">Tap Tempo tool</a> reads a track's BPM as you tap, then sends it straight back here to practise against.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More tools →</a></span>
+  </footer>
+
+  <script src="../assets/js/config.js"></script>
+  <script>window.ANALYTICS.tool = "metronome";</script>
+  <script defer src="../assets/js/metronome.js"></script>
+  <script defer src="../assets/js/share.js"></script>
+  <script defer src="../assets/js/analytics.js"></script>
+</body>
+</html>

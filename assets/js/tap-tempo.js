@@ -157,10 +157,9 @@
     const share = $('share');
     if (hasBpm) {
       share.hidden = false;
-      // The metronome currently lives at the site root and reads ?bpm. When the
-      // hub restructure lands and moves it to /metronome/, update this to
-      // '../metronome/?bpm='.
-      $('metro-link').href = '../?bpm=' + rounded;
+      // The metronome lives at /metronome/ (the hub is at the site root) and
+      // reads ?bpm to seed its starting tempo.
+      $('metro-link').href = '../metronome/?bpm=' + rounded;
       updateShareUrl(rounded);
     } else {
       share.hidden = true;
