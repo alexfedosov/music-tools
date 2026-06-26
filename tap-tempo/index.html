@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tap Tempo — Free Online BPM Tapper for Musicians</title>
+  <meta name="description" content="Find the BPM of any song by tapping in time. A free, accurate online tap tempo tool — tap a key or button, read the tempo, share the BPM. No ads, no signup.">
+  <link rel="canonical" href="https://alexfedosov.github.io/music-tools/tap-tempo/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tap Tempo — Free Online BPM Tapper">
+  <meta property="og:description" content="Tap in time and read the BPM instantly. Accurate rolling-average detection, share any tempo, send it to the metronome. Free, no signup.">
+  <meta property="og:url" content="https://alexfedosov.github.io/music-tools/tap-tempo/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <!-- Tap Tempo-specific styles. Kept page-local so this tool is fully
+       self-contained and doesn't depend on shared-stylesheet additions. -->
+  <style>
+    a.brand { color: var(--text); text-decoration: none; }
+    .bpm-display .value .decimal {
+      font-size: 0.45em; color: var(--muted); font-weight: 600; margin-left: 0.05em;
+    }
+    .stability {
+      min-height: 1.2rem; margin-top: 0.5rem; font-size: 0.85rem;
+      font-weight: 600; letter-spacing: 0.02em;
+    }
+    .stability.great { color: var(--beat-on); }
+    .stability.good { color: var(--accent-2); }
+    .stability.ok { color: #e8c266; }
+    .stability.meh { color: var(--muted); }
+    .tap-pad {
+      width: 100%; border: 1px solid var(--border); border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--bg-elev-2), #191c24);
+      color: var(--text); padding: 2.2rem 1rem; margin-bottom: 1.2rem; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+      transition: transform 0.04s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+    }
+    .tap-pad:hover { border-color: var(--accent-2); }
+    .tap-pad:active { transform: scale(0.99); }
+    .tap-pad.hit {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 28px -6px var(--beat-on), inset 0 0 0 1px var(--beat-on);
+      animation: tap-flash 0.18s ease-out;
+    }
+    @keyframes tap-flash { 0% { transform: scale(1.012); } 100% { transform: scale(1); } }
+    .tap-pad-label {
+      font-family: var(--mono); font-size: 1.6rem; font-weight: 700;
+      letter-spacing: 0.25em; color: var(--accent-2);
+    }
+    .tap-count { color: var(--muted); font-size: 0.85rem; }
+    .play-btn.alt { background: var(--bg-elev-2); color: var(--text); border: 1px solid var(--border); }
+    .play-btn.alt:hover:not(:disabled) { border-color: var(--accent); }
+    .play-btn:disabled { opacity: 0.45; cursor: default; }
+    .share {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+      flex-wrap: wrap; margin-bottom: 1.5rem; padding: 0.85rem 1rem;
+      background: var(--bg-elev-2); border: 1px solid var(--border); border-radius: 12px;
+    }
+    .share-link { font-weight: 600; text-decoration: none; }
+    .share-link:hover { text-decoration: underline; }
+  </style>
+
+  <!-- Structured data: helps search engines understand this is a web app -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Tap Tempo",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free online tap tempo tool: tap a key or button in rhythm to detect the BPM of any song, with a rolling average and shareable tempo links.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">music<span class="dot">·</span>tools</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Tap Tempo</h1>
+      <p class="lede">Tap any key or the pad in time with a track and we'll read the BPM — a rolling average that locks in fast and follows you if the tempo drifts.</p>
+    </section>
+
+    <section class="metronome" aria-label="Tap tempo">
+      <div class="bpm-display">
+        <div class="value"><span id="bpm-value">—</span><span class="decimal" id="bpm-decimal"></span></div>
+        <div class="unit">BPM</div>
+        <div class="stability" id="stability" aria-live="polite"></div>
+      </div>
+
+      <button class="tap-pad" id="tap-pad" type="button" aria-label="Tap in time to detect tempo">
+        <span class="tap-pad-label">TAP</span>
+        <span class="tap-count" id="tap-count" aria-live="polite">Tap to begin</span>
+      </button>
+
+      <div class="transport">
+        <button class="play-btn alt" id="reset-btn" type="button" disabled>Reset</button>
+      </div>
+
+      <div class="share" id="share" hidden>
+        <a class="share-link" id="metro-link" href="../">▶ Open this tempo in the Metronome</a>
+        <button class="tap-btn" id="copy-link" type="button">Copy share link</button>
+      </div>
+
+      <div class="settings">
+        <div class="field checkbox">
+          <input type="checkbox" id="click-toggle" checked>
+          <label for="click-toggle">Click on each tap</label>
+        </div>
+      </div>
+
+      <p class="hint">Press <kbd>any key</kbd> or tap the pad in time. <kbd>Esc</kbd> resets. We average your last few taps, so keep going to sharpen the reading.</p>
+    </section>
+
+    <section class="prose">
+      <h2>How to find a song's BPM by tapping</h2>
+      <p>Play the track and tap along on the beat — the kick drum or the snare is easiest. After two taps you'll see a tempo; after a handful it settles into an accurate reading. We average the gaps between your most recent taps, so it tracks the groove instead of being dragged around by an early mistap. Stop tapping for a couple of seconds and the next tap starts a fresh measurement.</p>
+      <h2>Why a rolling average</h2>
+      <p>A single pair of taps is noisy — your hand is never perfectly on the beat. By averaging the last several intervals we cancel out that jitter, and the <strong>stability</strong> read-out tells you how tight your tapping is. Once you've got a number, send it straight to the <a href="../metronome/">metronome</a> to practise against it, or copy the link to share the exact tempo.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More tools →</a></span>
+  </footer>
+
+  <script src="../assets/js/config.js"></script>
+  <script>window.ANALYTICS && (window.ANALYTICS.tool = 'tap-tempo');</script>
+  <script defer src="../assets/js/tap-tempo.js"></script>
+  <script defer src="../assets/js/analytics.js"></script>
+</body>
+</html>

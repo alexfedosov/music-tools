@@ -183,7 +183,9 @@
   }
 
   function init() {
-    setBpm(state.bpm);
+    // Allow deep-linking a tempo, e.g. from the Tap Tempo tool: ?bpm=128
+    const seed = parseInt(new URLSearchParams(location.search).get('bpm'), 10);
+    setBpm(seed || state.bpm);
     buildBeatDots();
 
     $('play-toggle').addEventListener('click', toggle);
