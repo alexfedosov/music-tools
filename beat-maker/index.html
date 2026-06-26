@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Online Beat Maker — Free Step Drum Sequencer in Your Browser</title>
+  <meta name="description" content="A free online drum machine and 16-step beat sequencer with rock-solid Web Audio timing. Tap out kicks, snares, hats and claps, set the tempo and swing, then share your groove with a link. No ads, no signup.">
+  <link rel="canonical" href="https://alexfedosov.github.io/music-tools/beat-maker/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Online Beat Maker — Free Step Drum Sequencer">
+  <meta property="og:description" content="Make a beat in your browser: kicks, snares, hats and claps on a 16-step grid with accurate timing and swing. Share your groove with a link.">
+  <meta property="og:url" content="https://alexfedosov.github.io/music-tools/beat-maker/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+
+  <!-- Structured data: helps search engines understand this is a web app -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Online Beat Maker",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free online drum machine and 16-step step sequencer with accurate Web Audio timing, adjustable tempo and swing, and shareable patterns.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">music<span class="dot">·</span>tools</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Beat Maker</h1>
+      <p class="lede">A 16-step drum machine in your browser. Click the grid to build a groove, dial in the tempo and swing, and share it with a link. Built on the Web Audio clock, so it never drifts.</p>
+    </section>
+
+    <section class="sequencer" aria-label="Drum sequencer">
+      <div class="seq-transport">
+        <button class="play-btn" id="play-toggle" type="button" aria-pressed="false">Play</button>
+        <div class="seq-readouts">
+          <div class="readout">
+            <label for="bpm-slider">Tempo</label>
+            <div class="readout-row">
+              <input type="range" id="bpm-slider" min="50" max="200" value="120" step="1" aria-label="Tempo in beats per minute">
+              <span class="readout-val"><span id="bpm-value">120</span> BPM</span>
+            </div>
+          </div>
+          <div class="readout">
+            <label for="swing-slider">Swing</label>
+            <div class="readout-row">
+              <input type="range" id="swing-slider" min="0" max="0.6" value="0" step="0.01" aria-label="Swing amount">
+              <span class="readout-val" id="swing-value">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seq-grid" id="grid"></div>
+
+      <div class="seq-toolbar">
+        <div class="presets" role="group" aria-label="Pattern presets">
+          <span class="presets-label">Presets</span>
+          <button type="button" data-preset="four-floor">Four&nbsp;on&nbsp;the&nbsp;floor</button>
+          <button type="button" data-preset="boom-bap">Boom&nbsp;bap</button>
+          <button type="button" data-preset="trap">Trap</button>
+          <button type="button" data-preset="house">House</button>
+        </div>
+        <div class="seq-actions">
+          <div class="field volume-field">
+            <label for="volume">Volume</label>
+            <input type="range" id="volume" min="0" max="1" value="0.9" step="0.01" aria-label="Volume">
+          </div>
+          <button class="ghost-btn" id="clear-btn" type="button">Clear</button>
+          <button class="tap-btn" id="share-btn" type="button">Share link</button>
+        </div>
+      </div>
+
+      <p class="hint">Press <kbd>Space</kbd> to play or stop. Click and drag across the grid to paint a row. Your pattern lives in the URL — just copy the address to share it.</p>
+    </section>
+
+    <section class="prose">
+      <h2>Make a beat in seconds</h2>
+      <p>Each row is a drum — kick, snare, hi-hat, open hat, clap and tom. Each column is one 16th-note step, four steps to a beat, sixteen to a bar. Switch on the cells you want and hit play. The darker columns mark the start of each beat so it's easy to see the groove.</p>
+      <h2>Why the timing is tight</h2>
+      <p>Like a hardware drum machine, every hit is scheduled ahead of time on the Web Audio hardware clock instead of a JavaScript timer, so the pattern stays locked even when the page is busy or the tab is in the background. Add <strong>swing</strong> to push the off-beats late for a looser, more human feel.</p>
+      <h2>Share your groove</h2>
+      <p>The whole pattern — every cell, the tempo and the swing — is encoded in the page URL. Hit <strong>Share link</strong> (or just copy the address bar) and whoever opens it hears exactly what you made. Great for trading ideas or dropping a beat in a chat.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More music·tools</a></span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script defer src="sequencer.js"></script>
+  <script defer src="../assets/js/analytics.js"></script>
+</body>
+</html>

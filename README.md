@@ -6,7 +6,9 @@ Free, fast, fun web tools for music makers. Static site, no build step, deployed
 
 ## Tools
 
-- **Online Metronome** (`/`) — accurate Web Audio metronome: adjustable BPM (40–240), time signatures, downbeat accent, tap tempo, keyboard control.
+- **Online Metronome** (`/`) — accurate Web Audio metronome: adjustable BPM (40–240), time signatures, downbeat accent, tap tempo, keyboard control. Accepts `?bpm=NNN` to deep-link a tempo.
+- **Tap Tempo** (`/tap-tempo/`) — tap a key or button in time to detect a song's BPM. Rolling-average detection with a stability read-out, reset, shareable `?bpm=NNN` link, and one-click hand-off to the metronome.
+- **Beat Maker** (`/beat-maker/`) — a 16-step drum machine: 6 synthesised drum voices (kick, snare, hat, open hat, clap, tom), adjustable tempo & swing, lookahead-scheduled timing, click-and-drag painting, built-in presets, and a fully shareable pattern encoded in the URL (`?p=…&t=BPM&s=swing`).
 
 ## Stack
 
@@ -19,8 +21,13 @@ Free, fast, fun web tools for music makers. Static site, no build step, deployed
 
 ```
 index.html              Metronome (home page)
+tap-tempo/index.html    Tap Tempo tool
+beat-maker/index.html   Beat Maker tool (page)
+beat-maker/sequencer.js Beat Maker engine (Web Audio step sequencer)
+beat-maker/config.js    Beat Maker analytics config
 assets/css/site.css     Shared styles
 assets/js/metronome.js  Metronome engine (Web Audio scheduler)
+assets/js/tap-tempo.js  Tap Tempo engine (rolling-average BPM detection)
 assets/js/analytics.js  Privacy-friendly beacon
 assets/js/config.js     Runtime config (public insert-only analytics key)
 .well-known/jwks.json   Public key the analytics Data API uses to verify the beacon token
