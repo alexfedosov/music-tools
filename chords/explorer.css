@@ -1,0 +1,112 @@
+/* Chord & Scale Explorer — tool-specific styles.
+ * Kept in its own file (rather than the shared site.css) so the tool is
+ * self-contained. Base layout/typography come from ../assets/css/site.css.
+ * A couple of cross-tool helpers (.crumbs, a.brand) are duplicated here
+ * defensively so the page looks right even if site.css lags behind. */
+
+a.brand { color: var(--text); text-decoration: none; }
+
+.crumbs {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+.crumbs a { color: var(--accent-2); text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.crumbs span[aria-hidden] { margin: 0 0.35rem; color: var(--border); }
+
+/* Card holding the whole tool */
+.explorer {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.4rem 1.8rem;
+  box-shadow: 0 20px 50px -25px rgba(0,0,0,0.7);
+}
+.explorer .settings { grid-template-columns: 1fr 1fr auto; align-items: end; }
+.explorer .settings .checkbox { align-self: center; }
+
+.scale-head { margin: 1.6rem 0 0.4rem; }
+.scale-head h2 {
+  margin: 0;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  letter-spacing: -0.02em;
+}
+.scale-formula {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.block-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1.5rem 0 0.6rem;
+  font-weight: 600;
+}
+
+/* Scale note pills (click to hear) */
+.note-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.note-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-width: 52px;
+  padding: 0.5rem 0.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.06s ease, border-color 0.12s ease, background 0.2s ease;
+}
+.note-pill:hover { border-color: var(--accent-2); }
+.note-pill .deg { font-size: 0.7rem; color: var(--muted); font-family: var(--mono); }
+.note-pill .nm { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
+.note-pill.lit {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  transform: scale(1.08);
+}
+.note-pill.lit .deg, .note-pill.lit .nm { color: #07120f; }
+
+/* Diatonic chord cards (click to hear) */
+.chord-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: 0.6rem;
+}
+.chord-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.7rem 0.7rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.06s ease, border-color 0.12s ease, background 0.2s ease;
+}
+.chord-card:hover { border-color: var(--accent); }
+.chord-card .roman { font-family: var(--mono); font-size: 0.78rem; color: var(--accent-2); }
+.chord-card .chord-name { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.chord-card .chord-quality { font-size: 0.72rem; color: var(--muted); }
+.chord-card .chord-notes { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; font-family: var(--mono); }
+.chord-card.lit {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.04);
+}
+.chord-card.lit .roman, .chord-card.lit .chord-quality, .chord-card.lit .chord-notes { color: #2a0606; }
+.chord-card.lit .chord-name { color: #fff; }
+
+@media (max-width: 480px) {
+  .explorer .settings { grid-template-columns: 1fr 1fr; }
+}

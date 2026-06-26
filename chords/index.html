@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Chord &amp; Scale Explorer — Keys, Modes &amp; Diatonic Chords</title>
+  <meta name="description" content="Pick any key and scale or mode and instantly see the correct notes and diatonic chords — triads or 7ths — with roman numerals. Click any note or chord to hear it. Free, no signup.">
+  <link rel="canonical" href="https://alexfedosov.github.io/music-tools/chords/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="music·tools">
+  <meta property="og:title" content="Chord &amp; Scale Explorer — Keys, Modes &amp; Diatonic Chords">
+  <meta property="og:description" content="See the notes and diatonic chords of any key, scale, or mode. Click to hear them. Shareable, free, no signup.">
+  <meta property="og:url" content="https://alexfedosov.github.io/music-tools/chords/">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <link rel="stylesheet" href="explorer.css">
+
+  <!-- This page is a web app -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Chord & Scale Explorer",
+    "url": "https://alexfedosov.github.io/music-tools/chords/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "Explore the notes and diatonic chords of any key, scale, or mode, with correct enharmonic spelling, roman numerals, and click-to-hear playback.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <!-- Breadcrumb: hub › this tool -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "music·tools", "item": "https://alexfedosov.github.io/music-tools/" },
+      { "@type": "ListItem", "position": 2, "name": "Chord & Scale Explorer", "item": "https://alexfedosov.github.io/music-tools/chords/" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">music<span class="dot">·</span>tools</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Chord &amp; Scale Explorer</span>
+    </nav>
+
+    <section class="hero">
+      <h1>Chord &amp; Scale Explorer</h1>
+      <p class="lede">Pick a key and a scale or mode. See the notes spelled correctly and every diatonic chord, then click anything to hear it. Share the URL to send someone the exact key you're working in.</p>
+    </section>
+
+    <section class="explorer" aria-label="Chord and scale explorer">
+      <div class="settings">
+        <div class="field">
+          <label for="root-select">Key / root</label>
+          <select id="root-select"></select>
+        </div>
+        <div class="field">
+          <label for="scale-select">Scale / mode</label>
+          <select id="scale-select"></select>
+        </div>
+        <div class="field checkbox">
+          <input type="checkbox" id="seventh-toggle">
+          <label for="seventh-toggle">7th chords</label>
+        </div>
+      </div>
+
+      <div class="scale-head">
+        <h2 id="scale-title">Scale</h2>
+        <p id="scale-formula" class="scale-formula"></p>
+      </div>
+
+      <div class="notes-block">
+        <h3 class="block-label">Notes</h3>
+        <div id="scale-notes" class="note-row" role="group" aria-label="Scale notes"></div>
+      </div>
+
+      <div class="chords-block">
+        <h3 class="block-label">Diatonic chords</h3>
+        <div id="chord-grid" class="chord-grid" role="group" aria-label="Diatonic chords"></div>
+      </div>
+
+      <p class="hint">Click a note or chord to hear it. Switch on <strong>7th chords</strong> for richer, jazzier voicings.</p>
+    </section>
+
+    <section class="prose">
+      <h2>What is a diatonic chord?</h2>
+      <p>Every major or minor key contains seven notes. If you build a chord on each of those notes using only notes from the scale — stacking every other note — you get that key's <strong>diatonic chords</strong>. They're the chords that naturally sound "in key", which is why most songs are built almost entirely from them. The roman numerals (I, ii, iii, IV, V, vi, vii°) are a key-independent way to talk about those chords, so a "I–V–vi–IV" progression means the same shape in any key.</p>
+      <h2>Scales, modes &amp; how to use this</h2>
+      <p>Choose a root and a scale or mode to see its notes spelled the way a musician would write them — C major reads C D E F G A B, never with a doubled letter. The seven church modes (Ionian through Locrian), plus harmonic and melodic minor, are all here. Flip on 7th chords to reveal the major-7, dominant-7, minor-7 and half-diminished colours that give a progression its mood. Found a key you like? The page URL updates as you go, so you can bookmark or share it.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More music·tools →</a></span>
+  </footer>
+
+  <!-- Shared analytics config; tag this page view as the explorer. -->
+  <script src="../assets/js/config.js"></script>
+  <script>if (window.ANALYTICS) window.ANALYTICS.tool = 'chord-scale-explorer';</script>
+  <script src="../assets/js/theory.js"></script>
+  <script defer src="../assets/js/explorer.js"></script>
+  <script defer src="../assets/js/analytics.js"></script>
+</body>
+</html>
