@@ -31,6 +31,41 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://pockettempo.xyz/delay/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/60-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/80-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/90-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/100-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/120-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pockettempo.xyz/metronome/140-bpm/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://pockettempo.xyz/feel/swing/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

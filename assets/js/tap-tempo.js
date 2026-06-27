@@ -160,6 +160,10 @@
       // The metronome lives at /metronome/ (the hub is at the site root) and
       // reads ?bpm to seed its starting tempo.
       $('metro-link').href = '../metronome/?bpm=' + rounded;
+      // The delay calculator reads the same ?bpm contract, so a tapped tempo
+      // flows straight into "set your delay time".
+      var delayLink = $('delay-link');
+      if (delayLink) delayLink.href = '../delay/?bpm=' + rounded;
       updateShareUrl(rounded);
     } else {
       share.hidden = true;

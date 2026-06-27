@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Delay &amp; Reverb Time Calculator — BPM to ms | Pocket Tempo</title>
+  <meta name="description" content="Free delay time calculator: type your BPM and instantly get note delay times in milliseconds — normal, dotted and triplet, plus LFO Hz. The fast BPM-to-ms and reverb time calculator for producers. No ads, no signup.">
+  <meta name="keywords" content="delay time calculator, bpm to ms calculator, reverb time calculator, delay calculator, ms to bpm, dotted eighth delay, lfo hz calculator">
+  <link rel="canonical" href="https://pockettempo.xyz/delay/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pocket Tempo">
+  <meta property="og:title" content="Delay &amp; Reverb Time Calculator — BPM to ms">
+  <meta property="og:description" content="Type a BPM, get every note delay time in milliseconds — normal, dotted and triplet — plus LFO Hz. Free, instant, no signup.">
+  <meta property="og:url" content="https://pockettempo.xyz/delay/">
+  <meta property="og:image" content="https://pockettempo.xyz/assets/og/hub.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Delay &amp; Reverb Time Calculator — BPM to ms">
+  <meta name="twitter:description" content="Type a BPM, get every note delay time in ms — normal, dotted, triplet — plus LFO Hz. Free, instant, no signup.">
+  <meta name="twitter:image" content="https://pockettempo.xyz/assets/og/hub.png">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <!-- Page-local styles. Kept here so this tool is fully self-contained and
+       doesn't depend on shared-stylesheet additions. -->
+  <style>
+    a.brand { color: var(--text); text-decoration: none; }
+    .bpm-input-row {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      flex-wrap: wrap; margin: 0.5rem 0 1.4rem;
+    }
+    .bpm-input-row label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    #bpm {
+      font-family: var(--mono); font-size: 2rem; font-weight: 700; width: 5.5ch;
+      text-align: center; color: var(--accent-2);
+      background: var(--bg-elev-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.35rem 0.5rem;
+    }
+    #bpm:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,193,0.15); }
+    .bpm-input-row .unit { font-family: var(--mono); color: var(--muted); font-weight: 700; }
+    .unit-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .unit-toggle button {
+      background: var(--bg-elev-2); color: var(--muted); border: 0; cursor: pointer;
+      font-weight: 700; font-size: 0.82rem; padding: 0.45rem 0.8rem; font-family: var(--mono);
+    }
+    .unit-toggle button[aria-pressed="true"] { background: var(--accent-2); color: #0c1512; }
+
+    .delay-table { width: 100%; border-collapse: collapse; margin-bottom: 0.6rem; }
+    .delay-table caption { text-align: left; color: var(--muted); font-size: 0.8rem; margin-bottom: 0.5rem; }
+    .delay-table th, .delay-table td { padding: 0.55rem 0.4rem; text-align: right; border-bottom: 1px solid var(--border); }
+    .delay-table thead th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+    .delay-table th[scope="row"] { text-align: left; font-weight: 600; color: var(--text); }
+    .delay-table th[scope="row"] small { display: block; color: var(--muted); font-weight: 400; font-size: 0.72rem; }
+    .delay-table tbody tr.beat-row { background: rgba(77,214,193,0.06); }
+    .val {
+      font-family: var(--mono); font-weight: 600; cursor: pointer; border: 0; background: none;
+      color: var(--text); padding: 0.15rem 0.3rem; border-radius: 6px; font-size: 0.95rem;
+    }
+    .val:hover { background: var(--bg-elev-2); color: var(--accent-2); }
+    .val.copied { background: var(--accent-2); color: #0c1512; }
+    .val .u { color: var(--muted); font-weight: 400; font-size: 0.78em; margin-left: 0.1em; }
+    .copy-hint { color: var(--muted); font-size: 0.75rem; text-align: center; margin: 0 0 1.4rem; }
+    .crosslinks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.5rem; }
+    @media (max-width: 480px) {
+      .delay-table th, .delay-table td { padding: 0.5rem 0.25rem; }
+      .val { font-size: 0.85rem; }
+      #bpm { font-size: 1.7rem; }
+    }
+  </style>
+
+  <!-- Structured data: free WebApplication + breadcrumbs + the spot-check FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Delay & Reverb Time Calculator",
+    "url": "https://pockettempo.xyz/delay/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free delay time calculator that converts BPM to milliseconds for every note value — normal, dotted and triplet — plus LFO Hz, for setting tempo-synced delay and reverb.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Pocket Tempo", "item": "https://pockettempo.xyz/" },
+      { "@type": "ListItem", "position": 2, "name": "Delay & Reverb Calculator", "item": "https://pockettempo.xyz/delay/" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do you convert BPM to milliseconds?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A quarter note (one beat) in milliseconds is 60000 divided by the BPM. At 120 BPM that is 500 ms. For other note values, multiply by 4 divided by the note's denominator: an eighth note at 120 BPM is 250 ms, a dotted eighth is 375 ms, and a triplet eighth is about 166.7 ms." }
+      },
+      {
+        "@type": "Question",
+        "name": "What delay time should I use at 120 BPM?",
+        "acceptedAnswer": { "@type": "Answer", "text": "At 120 BPM a quarter-note delay is 500 ms, an eighth-note delay is 250 ms, and the popular dotted-eighth delay is 375 ms." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">Pocket<span class="dot">·</span>Tempo</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Delay &amp; Reverb Calculator</span>
+    </nav>
+
+    <section class="hero">
+      <h1>Delay &amp; Reverb Time Calculator</h1>
+      <p class="lede">Type your track's BPM and read the delay time in milliseconds for every note value — normal, dotted and triplet — plus the LFO rate in Hz. Tap any number to copy it.</p>
+    </section>
+
+    <section class="metronome" aria-label="Delay time calculator">
+      <div class="bpm-input-row">
+        <label for="bpm">Tempo</label>
+        <input type="number" id="bpm" min="20" max="400" step="1" value="120"
+               inputmode="numeric" aria-label="Tempo in beats per minute">
+        <span class="unit">BPM</span>
+        <span class="unit-toggle" role="group" aria-label="Output unit">
+          <button type="button" id="unit-ms" aria-pressed="true">ms</button>
+          <button type="button" id="unit-hz" aria-pressed="false">Hz</button>
+        </span>
+      </div>
+
+      <table class="delay-table">
+        <caption id="table-caption">Delay times at 120 BPM, in milliseconds</caption>
+        <thead>
+          <tr>
+            <th scope="col" style="text-align:left">Note</th>
+            <th scope="col">Normal</th>
+            <th scope="col">Dotted&nbsp;·1.5</th>
+            <th scope="col">Triplet&nbsp;·⅔</th>
+          </tr>
+        </thead>
+        <tbody id="rows"><!-- filled by JS --></tbody>
+      </table>
+      <p class="copy-hint">Tap any value to copy it to your clipboard.</p>
+
+      <div class="share" id="share" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.2rem;padding:0.85rem 1rem;background:var(--bg-elev-2);border:1px solid var(--border);border-radius:12px;">
+        <span class="share-bar__label">Need the tempo first?</span>
+        <div class="crosslinks">
+          <a class="chip" href="../tap-tempo/">⇥ Tap it out</a>
+          <a class="chip" href="../metronome/" id="metro-link">♪ Open in metronome</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="prose">
+      <h2>How to set a tempo-synced delay</h2>
+      <p>A delay sounds musical when its repeats land on the grid. To do that, set the delay time to a note value at your song's tempo. The quarter note (one beat) is <strong>60000 ÷ BPM</strong> milliseconds — 500&nbsp;ms at 120&nbsp;BPM. Every other note is a fraction of that: an eighth-note delay is half a beat (250&nbsp;ms at 120), a sixteenth a quarter of a beat, and so on.</p>
+      <h2>Dotted vs triplet delays</h2>
+      <p>A <strong>dotted</strong> note is 1.5× longer than the plain note — the famous <em>dotted-eighth delay</em> (375&nbsp;ms at 120&nbsp;BPM) is the shimmering off-grid repeat behind countless guitar and pop productions. A <strong>triplet</strong> note is ⅔ of the plain note (a triplet eighth ≈ 166.7&nbsp;ms at 120), giving a rolling, galloping echo. Both are in the table above for every note value.</p>
+      <h2>Reverb times &amp; LFO sync</h2>
+      <p>The same numbers set <strong>tempo-synced reverb</strong>: match the reverb's pre-delay to a sixteenth or eighth, and tune the decay so the tail fades around a beat or two — use the quarter and half-note rows as anchors. Switch the table to <strong>Hz</strong> to sync an LFO, tremolo or auto-filter: it's just <code>1000 ÷ ms</code>, so an eighth note at 120&nbsp;BPM (250&nbsp;ms) is 4&nbsp;Hz.</p>
+      <h2>Find your BPM</h2>
+      <p>Don't know the tempo? <a href="../tap-tempo/">Tap it out</a> on our Tap Tempo tool — it sends the BPM straight here. Or practise against the number in the <a href="../metronome/">online metronome</a>, the only one with named human <a href="../feel/">feels</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More tools →</a></span>
+  </footer>
+
+  <script src="../assets/js/config.js"></script>
+  <script>window.ANALYTICS && (window.ANALYTICS.tool = 'delay');</script>
+  <script defer src="../assets/js/analytics.js"></script>
+  <script defer src="../assets/js/share.js"></script>
+  <script>
+  (function () {
+    'use strict';
+    // Note values: denominator d, where ms = (60000 / bpm) * (4 / d) * multiplier.
+    // The beat (quarter) row is highlighted as the reference.
+    var NOTES = [
+      { name: 'Whole',        sub: '1/1', d: 1 },
+      { name: 'Half',         sub: '1/2', d: 2 },
+      { name: 'Quarter',      sub: '1/4 · beat', d: 4, beat: true },
+      { name: 'Eighth',       sub: '1/8', d: 8 },
+      { name: 'Sixteenth',    sub: '1/16', d: 16 },
+      { name: 'Thirty-second',sub: '1/32', d: 32 }
+    ];
+    var MULT = [1, 1.5, 2 / 3];          // normal, dotted, triplet
+    var bpmEl = document.getElementById('bpm');
+    var rowsEl = document.getElementById('rows');
+    var captionEl = document.getElementById('table-caption');
+    var metroLink = document.getElementById('metro-link');
+    var unitMsBtn = document.getElementById('unit-ms');
+    var unitHzBtn = document.getElementById('unit-hz');
+    var unit = 'ms';
+
+    function msFor(bpm, d, mult) { return (60000 / bpm) * (4 / d) * mult; }
+
+    function fmt(ms) {
+      if (!isFinite(ms) || ms <= 0) return { text: '—', copy: '' };
+      if (unit === 'hz') {
+        var hz = 1000 / ms;
+        var h = hz >= 100 ? hz.toFixed(0) : hz.toFixed(2);
+        return { text: h, u: ' Hz', copy: h };
+      }
+      // ms: 1 decimal under 1000, whole numbers above for readability
+      var m = ms >= 1000 ? ms.toFixed(0) : ms.toFixed(1);
+      return { text: m, u: ' ms', copy: m };
+    }
+
+    function render() {
+      var bpm = parseFloat(bpmEl.value);
+      var valid = isFinite(bpm) && bpm >= 20 && bpm <= 400;
+      captionEl.textContent = valid
+        ? 'Delay times at ' + (Number.isInteger(bpm) ? bpm : bpm.toFixed(1)) + ' BPM, in ' + (unit === 'hz' ? 'Hz' : 'milliseconds')
+        : 'Enter a BPM between 20 and 400';
+      var html = '';
+      NOTES.forEach(function (n) {
+        html += '<tr class="' + (n.beat ? 'beat-row' : '') + '">';
+        html += '<th scope="row">' + n.name + '<small>' + n.sub + '</small></th>';
+        MULT.forEach(function (mult) {
+          var f = valid ? fmt(msFor(bpm, n.d, mult)) : { text: '—', u: '', copy: '' };
+          html += '<td><button class="val" type="button" data-copy="' + f.copy + '">'
+                + f.text + '<span class="u">' + (f.u || '') + '</span></button></td>';
+        });
+        html += '</tr>';
+      });
+      rowsEl.innerHTML = html;
+      if (valid) metroLink.href = '../metronome/?bpm=' + Math.round(bpm);
+    }
+
+    function setUnit(u) {
+      unit = u;
+      unitMsBtn.setAttribute('aria-pressed', String(u === 'ms'));
+      unitHzBtn.setAttribute('aria-pressed', String(u === 'hz'));
+      render();
+      if (window.track) window.track('delay_unit', u);
+    }
+
+    // Copy a value on click; flash the button.
+    rowsEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.val');
+      if (!btn) return;
+      var v = btn.getAttribute('data-copy');
+      if (!v) return;
+      var done = function () {
+        btn.classList.add('copied');
+        setTimeout(function () { btn.classList.remove('copied'); }, 900);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(v).then(done, done);
+      } else { done(); }
+      if (window.track) window.track('delay_copy');
+    });
+
+    bpmEl.addEventListener('input', render);
+    unitMsBtn.addEventListener('click', function () { setUnit('ms'); });
+    unitHzBtn.addEventListener('click', function () { setUnit('hz'); });
+
+    // Accept a BPM handoff from Tap Tempo / Metronome via ?bpm=NNN — the same
+    // URL contract the metronome already uses, so "tap → set delay time" flows.
+    var seed = parseInt(new URLSearchParams(location.search).get('bpm'), 10);
+    if (seed && seed >= 20 && seed <= 400) {
+      bpmEl.value = seed;
+      if (window.track) window.track('delay_bpm_handoff', String(seed));
+    }
+    render();
+  })();
+  </script>
+</body>
+</html>
