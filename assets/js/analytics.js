@@ -35,7 +35,9 @@
 (function () {
   'use strict';
   var cfg = window.ANALYTICS || {};
-  if (!cfg.endpoint) { window.track = window.trackOncePerSession = function () {}; return; }
+  // `enabled: false` drops analytics entirely (CEO directive, CRA-25 2026-06-27):
+  // no page-view beacon, and track()/trackOncePerSession() become no-ops.
+  if (cfg.enabled === false || !cfg.endpoint) { window.track = window.trackOncePerSession = function () {}; return; }
 
   function referrerHost() {
     try {
