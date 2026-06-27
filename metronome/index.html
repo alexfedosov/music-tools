@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Online Metronome — Free, Accurate Tempo Tool for Musicians</title>
-  <meta name="description" content="A free online metronome with rock-solid Web Audio timing. Set any BPM from 40–240, choose your time signature, accent the downbeat, and tap your tempo. No ads, no signup.">
+  <title>Online Metronome with Feels — Dilla, Swing, Purdie Shuffle | Pocket Tempo</title>
+  <meta name="description" content="A free online metronome with rock-solid Web Audio timing — and the only one with named human feels. Groove in the J Dilla pocket, the Purdie shuffle, boom-bap or behind the beat, not just a robot grid. Any BPM, time signature, tap tempo. No ads, no signup.">
   <link rel="canonical" href="https://alexfedosov.github.io/music-tools/metronome/">
   <meta name="theme-color" content="#0e1014">
 
   <!-- Open Graph / social -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Pocket Tempo">
-  <meta property="og:title" content="Online Metronome — Free & Accurate">
-  <meta property="og:description" content="Rock-solid Web Audio timing. Any BPM, time signature, accent, and tap tempo. Free, no signup.">
+  <meta property="og:title" content="Online Metronome with Feels — stop practising to a robot">
+  <meta property="og:description" content="The only free metronome with named human feels: Dilla, swing, Purdie shuffle, boom-bap, behind the beat. Rock-solid Web Audio timing. Free, no signup.">
   <meta property="og:url" content="https://alexfedosov.github.io/music-tools/metronome/">
   <meta property="og:image" content="https://alexfedosov.github.io/music-tools/assets/og/metronome.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Online Metronome — Free & Accurate">
-  <meta name="twitter:description" content="Rock-solid Web Audio timing. Any BPM, time signature, accent, and tap tempo. Free, no signup.">
+  <meta name="twitter:title" content="Online Metronome with Feels — stop practising to a robot">
+  <meta name="twitter:description" content="The only free metronome with named human feels: Dilla, swing, Purdie shuffle, boom-bap, behind the beat. Rock-solid timing, free, no signup.">
   <meta name="twitter:image" content="https://alexfedosov.github.io/music-tools/assets/og/metronome.png">
 
   <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
@@ -62,10 +62,19 @@
 
     <section class="hero">
       <h1>Online Metronome</h1>
-      <p class="lede">Rock-solid tempo, straight in your browser. Built on the Web Audio clock so the click never drifts — even with the tab in the background.</p>
+      <p class="lede">Rock-solid tempo, straight in your browser — and the only metronome that grooves in <strong>named human feels</strong>. Stop practising to a robot. Play in the pocket.</p>
     </section>
 
     <section class="metronome" aria-label="Metronome">
+      <div class="feel-picker" role="radiogroup" aria-label="Feel">
+        <div class="feel-picker__head">
+          <span class="feel-picker__title">Feel</span>
+          <span class="feel-picker__hint">Pick a pocket — the click grooves like the real thing.</span>
+        </div>
+        <div class="feel-chips" id="feel-chips"></div>
+        <p class="feel-desc" id="feel-desc"></p>
+      </div>
+
       <div class="beat-row" id="beat-indicator" role="img" aria-label="Beat indicator"></div>
 
       <div class="bpm-display">
@@ -107,6 +116,10 @@
           <input type="checkbox" id="accent-toggle" checked>
           <label for="accent-toggle">Accent the first beat</label>
         </div>
+        <div class="field checkbox">
+          <input type="checkbox" id="pulse-toggle">
+          <label for="pulse-toggle">Steady reference pulse <span class="muted">(hear the feel lean)</span></label>
+        </div>
       </div>
 
       <p class="hint">Press <kbd>Space</kbd> to start or stop. Tap the <strong>Tap</strong> button in time to set the tempo.</p>
@@ -115,17 +128,19 @@
     <section class="share-bar" aria-label="Share this tool">
       <span class="share-bar__label">Found this useful?</span>
       <div class="share-bar__actions">
-        <button class="chip" type="button" data-copy-link>Copy link</button>
-        <a class="chip" href="https://twitter.com/intent/tweet?text=Free%20online%20metronome%20with%20rock-solid%20timing&url=https%3A%2F%2Falexfedosov.github.io%2Fmusic-tools%2Fmetronome%2F" target="_blank" rel="noopener">Share on X</a>
+        <button class="chip" type="button" data-copy-link>Copy link to this feel</button>
+        <a class="chip" data-share-x href="https://twitter.com/intent/tweet?text=Free%20online%20metronome%20with%20rock-solid%20timing&url=https%3A%2F%2Falexfedosov.github.io%2Fmusic-tools%2Fmetronome%2F" target="_blank" rel="noopener">Share on X</a>
         <a class="chip chip--tip" data-tip-jar href="#" target="_blank" rel="noopener" hidden>☕ Buy me a coffee</a>
       </div>
     </section>
 
     <section class="prose">
+      <h2>The Feel Library — the only metronome that grooves like a human</h2>
+      <p>Every other free metronome gives you, at most, an abstract "swing %" slider. We give you <strong>named, real-record feels</strong>. Switch to <a href="../feel/dilla/">Dilla</a> and the click lurches with J Dilla's famous lopsided 16ths. Pick the <a href="../feel/purdie/">Purdie shuffle</a> and you get the ghost-noted half-time roll heard on Toto's "Rosanna." There's <a href="../feel/boom-bap/">boom-bap</a>, <a href="../feel/behind/">behind the beat</a>, classic <a href="../feel/swing/">swing</a>, and pushing <a href="../feel/push/">on top</a>. Flip on the steady reference pulse and you can literally hear the feel lean against the grid. <a href="../feel/">Browse the whole Feel Library →</a></p>
       <h2>Why this metronome stays in time</h2>
-      <p>Most browser metronomes fire their click from a JavaScript timer, which stutters whenever the page is busy. This one schedules every click ahead of time on the Web Audio hardware clock, so the beat lands exactly where it should — perfect for practising scales, tracking takes, or locking in a groove.</p>
+      <p>Most browser metronomes fire their click from a JavaScript timer, which stutters whenever the page is busy. This one schedules every click ahead of time on the Web Audio hardware clock, so the beat — and every micro-timed feel — lands exactly where it should. Perfect for practising scales, tracking takes, or locking into a pocket.</p>
       <h2>How to use it</h2>
-      <p>Drag the tempo slider or use the − / + buttons to dial in your BPM. Pick a time signature to set how many beats are in each bar; the first beat is accented so you always know where the bar starts. Not sure of the tempo? Hit <strong>Tap</strong> along with a track and we'll work it out.</p>
+      <p>Pick a <strong>feel</strong>, then drag the tempo slider or use the − / + buttons to dial in your BPM. Choose a time signature to set how many beats are in each bar; the first beat is accented so you always know where the bar starts. Not sure of the tempo? Hit <strong>Tap</strong> along with a track and we'll work it out.</p>
       <p>Need to match an existing song instead? Our dedicated <a href="../tap-tempo/">Tap Tempo tool</a> reads a track's BPM as you tap, then sends it straight back here to practise against.</p>
     </section>
   </main>
@@ -137,8 +152,8 @@
 
   <script src="../assets/js/config.js"></script>
   <script>window.ANALYTICS.tool = "metronome";</script>
-  <script defer src="../assets/js/metronome.js"></script>
-  <script defer src="../assets/js/share.js"></script>
   <script defer src="../assets/js/analytics.js"></script>
+  <script type="module" src="../assets/js/metronome.js"></script>
+  <script defer src="../assets/js/share.js"></script>
 </body>
 </html>

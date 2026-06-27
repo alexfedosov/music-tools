@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+  Dev-only template for the Feel Library social cards (1200×630). Not shipped.
+  Rendered headless per feel by scripts/build-feel-og.mjs:
+  ?name=Dilla&tag=...&emoji=🌀&color=%23b48cff&bpm=86
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  .card {
+    --feel: #4dd6c1;
+    width: 1200px; height: 630px;
+    background:
+      radial-gradient(900px 620px at 82% -18%, color-mix(in srgb, var(--feel) 38%, #0e1014) 0%, rgba(14,16,20,0) 60%),
+      radial-gradient(760px 560px at -5% 120%, #211522 0%, rgba(14,16,20,0) 55%),
+      #0e1014;
+    color: #f2f4f8;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 80px 88px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+  .brand .dot { color: #ff5d5d; }
+  .brand .badge {
+    margin-left: 8px; font-size: 16px; font-weight: 600; color: #c7ccd6;
+    border: 1px solid var(--feel); border-radius: 999px; padding: 6px 14px;
+    background: color-mix(in srgb, var(--feel) 14%, transparent);
+  }
+  .body { display: flex; align-items: center; gap: 44px; }
+  .emoji {
+    flex: none; width: 168px; height: 168px; border-radius: 36px;
+    background: #14171e; border: 1px solid color-mix(in srgb, var(--feel) 55%, #2a2f3a);
+    display: grid; place-items: center; font-size: 96px;
+    box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--feel) 70%, black);
+  }
+  .text { display: flex; flex-direction: column; gap: 16px; }
+  .kicker { color: var(--feel); font-weight: 800; font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; }
+  h1 { font-size: 96px; line-height: 0.98; font-weight: 800; letter-spacing: -0.03em; }
+  p.sub { font-size: 30px; line-height: 1.3; color: #aeb6c2; max-width: 640px; font-weight: 400; }
+  .foot { display: flex; align-items: center; gap: 16px; font-size: 24px; color: #aeb6c2; }
+  .pill { color: #f2f4f8; border: 1px solid #2a2f3a; border-radius: 999px; padding: 8px 18px; font-weight: 600; font-size: 22px; }
+  .accent-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: linear-gradient(90deg, var(--feel), #ff5d5d); }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="brand">Pocket<span class="dot">·</span>Tempo<span class="badge">The Feel Library</span></div>
+    <div class="body">
+      <div class="emoji" id="emoji">🌀</div>
+      <div class="text">
+        <div class="kicker" id="kicker">PLAY THE FEEL</div>
+        <h1 id="name">Dilla</h1>
+        <p class="sub" id="tag">The drunk, lopsided lurch.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <span class="pill" id="bpm">≈ 86 BPM</span>
+      <span>·</span>
+      <span>free online metronome · no signup</span>
+    </div>
+    <div class="accent-bar"></div>
+  </div>
+  <script>
+    var q = new URLSearchParams(location.search);
+    var card = document.getElementById('card');
+    if (q.get('color')) card.style.setProperty('--feel', q.get('color'));
+    if (q.get('emoji')) document.getElementById('emoji').textContent = q.get('emoji');
+    if (q.get('name')) document.getElementById('name').textContent = q.get('name');
+    if (q.get('tag')) document.getElementById('tag').textContent = q.get('tag');
+    if (q.get('kicker')) document.getElementById('kicker').textContent = q.get('kicker');
+    if (q.get('bpm')) document.getElementById('bpm').textContent = q.get('bpm');
+    else document.getElementById('bpm').style.display = 'none';
+  </script>
+</body>
+</html>

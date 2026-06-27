@@ -550,3 +550,139 @@ a.tool-card:hover {
 }
 .support h2 { margin: 0 0 0.4rem; font-size: 1.15rem; letter-spacing: -0.01em; }
 .support p { margin: 0 0 1rem; color: var(--muted); max-width: 58ch; }
+
+/* ===== The Feel Library — picker (metronome) ===== */
+.feel-picker {
+  margin-bottom: 1.4rem;
+  padding-bottom: 1.3rem;
+  border-bottom: 1px solid var(--border);
+}
+.feel-picker__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+.feel-picker__title {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+.feel-picker__hint { color: var(--muted); font-size: 0.82rem; }
+.feel-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.feel-chip {
+  --feel-color: var(--accent-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
+}
+.feel-chip:hover { border-color: var(--feel-color); }
+.feel-chip:active { transform: translateY(1px); }
+.feel-chip__emoji { font-size: 1.05rem; line-height: 1; }
+.feel-chip.active {
+  border-color: var(--feel-color);
+  background: color-mix(in srgb, var(--feel-color) 16%, var(--bg-elev-2));
+  box-shadow: 0 0 0 1px var(--feel-color) inset, 0 8px 24px -14px var(--feel-color);
+}
+.feel-desc {
+  margin: 0.85rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  min-height: 1.2em;
+}
+.feel-desc strong { color: var(--text); }
+.feel-desc__link { white-space: nowrap; }
+.field .muted { color: var(--muted); font-weight: 400; }
+
+/* ===== Feel landing pages ===== */
+.feel-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 0.5rem 0 0.4rem;
+}
+.feel-hero__emoji {
+  flex: none;
+  width: 72px; height: 72px;
+  display: grid;
+  place-items: center;
+  font-size: 2.2rem;
+  border-radius: 20px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 40px -22px rgba(0,0,0,0.8);
+}
+.feel-hero h1 { margin: 0; }
+.feel-hero__tag { color: var(--muted); margin: 0.2rem 0 0; }
+.feel-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.2rem 0 0.4rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #14070a;
+  font-weight: 800;
+  font-size: 1.02rem;
+  text-decoration: none;
+  border: none;
+  box-shadow: 0 14px 34px -16px var(--accent);
+}
+.feel-cta:hover { filter: brightness(1.06); color: #14070a; }
+.feel-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+}
+.feel-tag {
+  font-size: 0.8rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+.feel-heard { list-style: none; padding: 0; margin: 0.6rem 0 0; }
+.feel-heard li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.feel-heard li:last-child { border-bottom: none; }
+
+/* Feel Library index grid (reuses tool-card look) */
+.feel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.4rem;
+}
+.feel-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.15s, transform 0.05s;
+}
+.feel-card:hover { border-color: var(--feel-color, var(--accent-2)); transform: translateY(-1px); }
+.feel-card__emoji { font-size: 1.7rem; flex: none; }
+.feel-card__name { font-weight: 700; }
+.feel-card__tag { color: var(--muted); font-size: 0.82rem; line-height: 1.35; margin-top: 0.1rem; }
