@@ -25,52 +25,7 @@
 
   <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
   <link rel="stylesheet" href="../assets/css/site.css">
-  <!-- Page-local styles. Kept here so this tool is fully self-contained and
-       doesn't depend on shared-stylesheet additions. -->
-  <style>
-    a.brand { color: var(--text); text-decoration: none; }
-    .bpm-input-row {
-      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
-      flex-wrap: wrap; margin: 0.5rem 0 1.4rem;
-    }
-    .bpm-input-row label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    #bpm {
-      font-family: var(--mono); font-size: 2rem; font-weight: 700; width: 5.5ch;
-      text-align: center; color: var(--accent-2);
-      background: var(--bg-elev-2); border: 1px solid var(--border);
-      border-radius: 12px; padding: 0.35rem 0.5rem;
-    }
-    #bpm:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,193,0.15); }
-    .bpm-input-row .unit { font-family: var(--mono); color: var(--muted); font-weight: 700; }
-    .unit-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .unit-toggle button {
-      background: var(--bg-elev-2); color: var(--muted); border: 0; cursor: pointer;
-      font-weight: 700; font-size: 0.82rem; padding: 0.45rem 0.8rem; font-family: var(--mono);
-    }
-    .unit-toggle button[aria-pressed="true"] { background: var(--accent-2); color: #0c1512; }
-
-    .delay-table { width: 100%; border-collapse: collapse; margin-bottom: 0.6rem; }
-    .delay-table caption { text-align: left; color: var(--muted); font-size: 0.8rem; margin-bottom: 0.5rem; }
-    .delay-table th, .delay-table td { padding: 0.55rem 0.4rem; text-align: right; border-bottom: 1px solid var(--border); }
-    .delay-table thead th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-    .delay-table th[scope="row"] { text-align: left; font-weight: 600; color: var(--text); }
-    .delay-table th[scope="row"] small { display: block; color: var(--muted); font-weight: 400; font-size: 0.72rem; }
-    .delay-table tbody tr.beat-row { background: rgba(77,214,193,0.06); }
-    .val {
-      font-family: var(--mono); font-weight: 600; cursor: pointer; border: 0; background: none;
-      color: var(--text); padding: 0.15rem 0.3rem; border-radius: 6px; font-size: 0.95rem;
-    }
-    .val:hover { background: var(--bg-elev-2); color: var(--accent-2); }
-    .val.copied { background: var(--accent-2); color: #0c1512; }
-    .val .u { color: var(--muted); font-weight: 400; font-size: 0.78em; margin-left: 0.1em; }
-    .copy-hint { color: var(--muted); font-size: 0.75rem; text-align: center; margin: 0 0 1.4rem; }
-    .crosslinks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.5rem; }
-    @media (max-width: 480px) {
-      .delay-table th, .delay-table td { padding: 0.5rem 0.25rem; }
-      .val { font-size: 0.85rem; }
-      #bpm { font-size: 1.7rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="../assets/css/delay.css">
 
   <!-- Structured data: free WebApplication + breadcrumbs + the spot-check FAQ -->
   <script type="application/ld+json">
@@ -160,7 +115,7 @@
         <span class="share-bar__label">Need the tempo first?</span>
         <div class="crosslinks">
           <a class="chip" href="../tap-tempo/">⇥ Tap it out</a>
-          <a class="chip" href="../metronome/" id="metro-link">♪ Open in metronome</a>
+          <a class="chip" href="../metronome/" id="metro-link" data-base="../metronome/">♪ Open in metronome</a>
         </div>
       </div>
     </section>
@@ -174,6 +129,14 @@
       <p>The same numbers set <strong>tempo-synced reverb</strong>: match the reverb's pre-delay to a sixteenth or eighth, and tune the decay so the tail fades around a beat or two — use the quarter and half-note rows as anchors. Switch the table to <strong>Hz</strong> to sync an LFO, tremolo or auto-filter: it's just <code>1000 ÷ ms</code>, so an eighth note at 120&nbsp;BPM (250&nbsp;ms) is 4&nbsp;Hz.</p>
       <h2>Find your BPM</h2>
       <p>Don't know the tempo? <a href="../tap-tempo/">Tap it out</a> on our Tap Tempo tool — it sends the BPM straight here. Or practise against the number in the <a href="../metronome/">online metronome</a>, the only one with named human <a href="../feel/">feels</a>.</p>
+      <h2>Delay times by tempo</h2>
+      <p>Jump to a ready-made delay-time chart for a common BPM:
+        <a href="60-bpm/">60</a>, <a href="70-bpm/">70</a>, <a href="80-bpm/">80</a>,
+        <a href="85-bpm/">85</a>, <a href="90-bpm/">90</a>, <a href="95-bpm/">95</a>,
+        <a href="100-bpm/">100</a>, <a href="110-bpm/">110</a>, <a href="120-bpm/">120</a>,
+        <a href="128-bpm/">128</a>, <a href="130-bpm/">130</a>, <a href="140-bpm/">140</a>,
+        <a href="150-bpm/">150</a>, <a href="160-bpm/">160</a>, <a href="170-bpm/">170</a>,
+        <a href="174-bpm/">174</a> and <a href="180-bpm/">180 BPM</a>.</p>
     </section>
   </main>
 
@@ -186,100 +149,6 @@
   <script>window.ANALYTICS && (window.ANALYTICS.tool = 'delay');</script>
   <script defer src="../assets/js/analytics.js"></script>
   <script defer src="../assets/js/share.js"></script>
-  <script>
-  (function () {
-    'use strict';
-    // Note values: denominator d, where ms = (60000 / bpm) * (4 / d) * multiplier.
-    // The beat (quarter) row is highlighted as the reference.
-    var NOTES = [
-      { name: 'Whole',        sub: '1/1', d: 1 },
-      { name: 'Half',         sub: '1/2', d: 2 },
-      { name: 'Quarter',      sub: '1/4 · beat', d: 4, beat: true },
-      { name: 'Eighth',       sub: '1/8', d: 8 },
-      { name: 'Sixteenth',    sub: '1/16', d: 16 },
-      { name: 'Thirty-second',sub: '1/32', d: 32 }
-    ];
-    var MULT = [1, 1.5, 2 / 3];          // normal, dotted, triplet
-    var bpmEl = document.getElementById('bpm');
-    var rowsEl = document.getElementById('rows');
-    var captionEl = document.getElementById('table-caption');
-    var metroLink = document.getElementById('metro-link');
-    var unitMsBtn = document.getElementById('unit-ms');
-    var unitHzBtn = document.getElementById('unit-hz');
-    var unit = 'ms';
-
-    function msFor(bpm, d, mult) { return (60000 / bpm) * (4 / d) * mult; }
-
-    function fmt(ms) {
-      if (!isFinite(ms) || ms <= 0) return { text: '—', copy: '' };
-      if (unit === 'hz') {
-        var hz = 1000 / ms;
-        var h = hz >= 100 ? hz.toFixed(0) : hz.toFixed(2);
-        return { text: h, u: ' Hz', copy: h };
-      }
-      // ms: 1 decimal under 1000, whole numbers above for readability
-      var m = ms >= 1000 ? ms.toFixed(0) : ms.toFixed(1);
-      return { text: m, u: ' ms', copy: m };
-    }
-
-    function render() {
-      var bpm = parseFloat(bpmEl.value);
-      var valid = isFinite(bpm) && bpm >= 20 && bpm <= 400;
-      captionEl.textContent = valid
-        ? 'Delay times at ' + (Number.isInteger(bpm) ? bpm : bpm.toFixed(1)) + ' BPM, in ' + (unit === 'hz' ? 'Hz' : 'milliseconds')
-        : 'Enter a BPM between 20 and 400';
-      var html = '';
-      NOTES.forEach(function (n) {
-        html += '<tr class="' + (n.beat ? 'beat-row' : '') + '">';
-        html += '<th scope="row">' + n.name + '<small>' + n.sub + '</small></th>';
-        MULT.forEach(function (mult) {
-          var f = valid ? fmt(msFor(bpm, n.d, mult)) : { text: '—', u: '', copy: '' };
-          html += '<td><button class="val" type="button" data-copy="' + f.copy + '">'
-                + f.text + '<span class="u">' + (f.u || '') + '</span></button></td>';
-        });
-        html += '</tr>';
-      });
-      rowsEl.innerHTML = html;
-      if (valid) metroLink.href = '../metronome/?bpm=' + Math.round(bpm);
-    }
-
-    function setUnit(u) {
-      unit = u;
-      unitMsBtn.setAttribute('aria-pressed', String(u === 'ms'));
-      unitHzBtn.setAttribute('aria-pressed', String(u === 'hz'));
-      render();
-      if (window.track) window.track('delay_unit', u);
-    }
-
-    // Copy a value on click; flash the button.
-    rowsEl.addEventListener('click', function (e) {
-      var btn = e.target.closest('.val');
-      if (!btn) return;
-      var v = btn.getAttribute('data-copy');
-      if (!v) return;
-      var done = function () {
-        btn.classList.add('copied');
-        setTimeout(function () { btn.classList.remove('copied'); }, 900);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(v).then(done, done);
-      } else { done(); }
-      if (window.track) window.track('delay_copy');
-    });
-
-    bpmEl.addEventListener('input', render);
-    unitMsBtn.addEventListener('click', function () { setUnit('ms'); });
-    unitHzBtn.addEventListener('click', function () { setUnit('hz'); });
-
-    // Accept a BPM handoff from Tap Tempo / Metronome via ?bpm=NNN — the same
-    // URL contract the metronome already uses, so "tap → set delay time" flows.
-    var seed = parseInt(new URLSearchParams(location.search).get('bpm'), 10);
-    if (seed && seed >= 20 && seed <= 400) {
-      bpmEl.value = seed;
-      if (window.track) window.track('delay_bpm_handoff', String(seed));
-    }
-    render();
-  })();
-  </script>
+  <script defer src="../assets/js/delay-calc.js"></script>
 </body>
 </html>

@@ -1,0 +1,59 @@
+/* Delay & Reverb time calculator — shared styles.
+ * Loaded by the /delay/ hub and every /delay/{bpm}-bpm/ chart page, so the
+ * interactive calculator looks identical at any URL depth. Extracted from the
+ * old inline <style> on /delay/ (CRA-24) when the per-BPM pages shipped (CRA-29). */
+a.brand { color: var(--text); text-decoration: none; }
+
+.bpm-input-row {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  flex-wrap: wrap; margin: 0.5rem 0 1.4rem;
+}
+.bpm-input-row label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+#bpm {
+  font-family: var(--mono); font-size: 2rem; font-weight: 700; width: 5.5ch;
+  text-align: center; color: var(--accent-2);
+  background: var(--bg-elev-2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.35rem 0.5rem;
+}
+#bpm:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,193,0.15); }
+.bpm-input-row .unit { font-family: var(--mono); color: var(--muted); font-weight: 700; }
+.unit-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.unit-toggle button {
+  background: var(--bg-elev-2); color: var(--muted); border: 0; cursor: pointer;
+  font-weight: 700; font-size: 0.82rem; padding: 0.45rem 0.8rem; font-family: var(--mono);
+}
+.unit-toggle button[aria-pressed="true"] { background: var(--accent-2); color: #0c1512; }
+
+.delay-table { width: 100%; border-collapse: collapse; margin-bottom: 0.6rem; }
+.delay-table caption { text-align: left; color: var(--muted); font-size: 0.8rem; margin-bottom: 0.5rem; }
+.delay-table th, .delay-table td { padding: 0.55rem 0.4rem; text-align: right; border-bottom: 1px solid var(--border); }
+.delay-table thead th { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.delay-table th[scope="row"] { text-align: left; font-weight: 600; color: var(--text); }
+.delay-table th[scope="row"] small { display: block; color: var(--muted); font-weight: 400; font-size: 0.72rem; }
+.delay-table tbody tr.beat-row { background: rgba(77,214,193,0.06); }
+.val {
+  font-family: var(--mono); font-weight: 600; cursor: pointer; border: 0; background: none;
+  color: var(--text); padding: 0.15rem 0.3rem; border-radius: 6px; font-size: 0.95rem;
+}
+.val:hover { background: var(--bg-elev-2); color: var(--accent-2); }
+.val.copied { background: var(--accent-2); color: #0c1512; }
+.val .u { color: var(--muted); font-weight: 400; font-size: 0.78em; margin-left: 0.1em; }
+.copy-hint { color: var(--muted); font-size: 0.75rem; text-align: center; margin: 0 0 1.4rem; }
+.crosslinks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.5rem; }
+
+/* Highlighted "headline" delay value on the per-BPM chart pages (the
+ * dotted-eighth — the single most-searched delay intent). */
+.delay-headline {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.9rem;
+  background: var(--bg-elev-2); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-2); border-radius: 12px;
+  padding: 0.9rem 1rem; margin: 0 0 1.2rem;
+}
+.delay-headline b { font-family: var(--mono); font-size: 1.4rem; color: var(--accent-2); font-weight: 800; }
+.delay-headline .lbl { color: var(--muted); font-size: 0.85rem; }
+
+@media (max-width: 480px) {
+  .delay-table th, .delay-table td { padding: 0.5rem 0.25rem; }
+  .val { font-size: 0.85rem; }
+  #bpm { font-size: 1.7rem; }
+}
