@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Note to Frequency Calculator &amp; Chart — Hz + Cents (A4 adjustable) | Pocket Tempo</title>
+  <meta name="description" content="Free note frequency chart and calculator: every musical note's frequency in Hz from C0 to B8, with an adjustable A4 reference (440, 432, 442…). Convert a note to Hz or a frequency to the nearest note plus cents offset. No mic, no signup.">
+  <meta name="keywords" content="note frequency chart, note to frequency, frequency of musical notes, a4 440hz, 432 hz, note frequency calculator, hz to note, cents calculator">
+  <link rel="canonical" href="https://pockettempo.xyz/note-frequency/">
+  <meta name="theme-color" content="#0e1014">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Pocket Tempo">
+  <meta property="og:title" content="Note to Frequency Calculator &amp; Chart — Hz + Cents">
+  <meta property="og:description" content="Every musical note's frequency in Hz from C0 to B8 with an adjustable A4 reference. Convert note → Hz or frequency → nearest note + cents. Free, instant, no mic.">
+  <meta property="og:url" content="https://pockettempo.xyz/note-frequency/">
+  <meta property="og:image" content="https://pockettempo.xyz/assets/og/hub.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Note to Frequency Calculator &amp; Chart — Hz + Cents">
+  <meta name="twitter:description" content="Every note's frequency in Hz, C0–B8, adjustable A4. Note → Hz and Hz → nearest note + cents. Free, no mic, no signup.">
+  <meta name="twitter:image" content="https://pockettempo.xyz/assets/og/hub.png">
+
+  <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <!-- Page-local styles. Kept here so this tool is fully self-contained and
+       doesn't depend on shared-stylesheet additions. -->
+  <style>
+    a.brand { color: var(--text); text-decoration: none; }
+
+    /* A4 reference control */
+    .ref-row {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      flex-wrap: wrap; margin: 0.25rem 0 1.4rem;
+    }
+    .ref-row label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    #a4 {
+      font-family: var(--mono); font-size: 1.6rem; font-weight: 700; width: 5.5ch;
+      text-align: center; color: var(--accent-2);
+      background: var(--bg-elev-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 0.3rem 0.45rem;
+    }
+    #a4:focus { outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,193,0.15); }
+    .ref-row .unit { font-family: var(--mono); color: var(--muted); font-weight: 700; }
+    .preset-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .preset-toggle button {
+      background: var(--bg-elev-2); color: var(--muted); border: 0; cursor: pointer;
+      font-weight: 700; font-size: 0.82rem; padding: 0.45rem 0.7rem; font-family: var(--mono);
+      border-left: 1px solid var(--border);
+    }
+    .preset-toggle button:first-child { border-left: 0; }
+    .preset-toggle button[aria-pressed="true"] { background: var(--accent-2); color: #0c1512; }
+
+    /* Two-way converter */
+    .convert {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-bottom: 1.4rem;
+    }
+    .conv-card {
+      background: var(--bg-elev-2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 0.95rem 1rem;
+    }
+    .conv-card h3 {
+      margin: 0 0 0.7rem; font-size: 0.72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.07em; font-weight: 700;
+    }
+    .conv-inputs { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .conv-inputs select, .conv-inputs input {
+      font-family: var(--mono); font-size: 1rem; font-weight: 600;
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 9px; padding: 0.45rem 0.55rem;
+    }
+    .conv-inputs select:focus, .conv-inputs input:focus {
+      outline: none; border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(77,214,193,0.15);
+    }
+    #hz-in { width: 8ch; text-align: right; }
+    .conv-out { margin-top: 0.85rem; font-family: var(--mono); }
+    .conv-out .big { font-size: 1.7rem; font-weight: 700; color: var(--accent-2); }
+    .conv-out .big .u { font-size: 0.85rem; color: var(--muted); font-weight: 400; margin-left: 0.15em; }
+    .conv-out .sub { display: block; margin-top: 0.2rem; color: var(--muted); font-size: 0.85rem; }
+    .cents.flat { color: #ffb454; }
+    .cents.sharp { color: #ff8f8f; }
+    .cents.intune { color: var(--accent-2); }
+
+    /* Chart */
+    .chart-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 0.5rem; }
+    .freq-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    .freq-table caption { text-align: left; color: var(--muted); font-size: 0.8rem; margin-bottom: 0.5rem; caption-side: top; }
+    .freq-table th, .freq-table td { padding: 0.4rem 0.35rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .freq-table thead th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+    .freq-table th[scope="row"] { text-align: left; font-weight: 700; color: var(--text); font-family: var(--mono); }
+    .freq-table th[scope="row"] small { color: var(--muted); font-weight: 400; font-size: 0.78em; margin-left: 0.15em; }
+    .val {
+      font-family: var(--mono); font-weight: 600; cursor: pointer; border: 0; background: none;
+      color: var(--text); padding: 0.12rem 0.28rem; border-radius: 6px; font-size: 0.86rem; width: 100%; text-align: right;
+    }
+    .val:hover { background: var(--bg); color: var(--accent-2); }
+    .val.copied { background: var(--accent-2); color: #0c1512; }
+    .val.is-ref { color: var(--accent-2); }
+    .freq-table tr.row-A td .val.is-ref { box-shadow: inset 0 0 0 1px var(--accent-2); border-radius: 6px; }
+    .copy-hint { color: var(--muted); font-size: 0.75rem; text-align: center; margin: 0 0 1.4rem; }
+    .crosslinks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.5rem; }
+    @media (max-width: 560px) {
+      .convert { grid-template-columns: 1fr; }
+      .val { font-size: 0.8rem; }
+    }
+  </style>
+
+  <!-- Structured data: free WebApplication + breadcrumbs + the spot-check FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Note to Frequency Calculator & Chart",
+    "url": "https://pockettempo.xyz/note-frequency/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any (web browser)",
+    "description": "A free note frequency chart and calculator: the frequency in Hz of every musical note from C0 to B8 with an adjustable A4 reference, plus two-way conversion between a note and a frequency with the cents offset.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Pocket Tempo", "item": "https://pockettempo.xyz/" },
+      { "@type": "ListItem", "position": 2, "name": "Note Frequency Calculator", "item": "https://pockettempo.xyz/note-frequency/" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the frequency of A4?",
+        "acceptedAnswer": { "@type": "Answer", "text": "A4 is 440 Hz at the standard concert pitch. From there every note is found with equal temperament: f = 440 × 2^((n − 69) / 12), where n is the MIDI note number. So A5 is 880 Hz, A3 is 220 Hz, and middle C (C4) is about 261.63 Hz." }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you convert a frequency to a musical note?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Take n = 69 + 12 × log2(frequency / 440). Round n to the nearest whole number to get the closest note, and the leftover fraction times 100 is how many cents sharp or flat the frequency is from that note." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is 432 Hz tuning?",
+        "acceptedAnswer": { "@type": "Answer", "text": "432 Hz tuning sets the A4 reference to 432 Hz instead of the standard 440 Hz, shifting every note down by about 32 cents. Set the A4 reference on this page to 432 to read the whole chart in that tuning." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../">Pocket<span class="dot">·</span>Tempo</a>
+    <span class="tag">free web tools for music makers</span>
+  </header>
+
+  <main>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Note Frequency Calculator</span>
+    </nav>
+
+    <section class="hero">
+      <h1>Note &amp; Frequency Calculator</h1>
+      <p class="lede">The frequency in hertz of every musical note from C0 to B8, with an adjustable A&#8202;4 reference. Convert a note to its frequency, or a frequency to the nearest note plus its cents offset. Pure equal-temperament math — no microphone, no signup.</p>
+    </section>
+
+    <section class="metronome" aria-label="Note and frequency calculator">
+      <div class="ref-row">
+        <label for="a4">A4 reference</label>
+        <input type="number" id="a4" min="400" max="480" step="0.1" value="440"
+               inputmode="decimal" aria-label="A4 reference frequency in hertz">
+        <span class="unit">Hz</span>
+        <span class="preset-toggle" role="group" aria-label="A4 reference preset">
+          <button type="button" data-a4="432" aria-pressed="false">432</button>
+          <button type="button" data-a4="440" aria-pressed="true">440</button>
+          <button type="button" data-a4="442" aria-pressed="false">442</button>
+        </span>
+      </div>
+
+      <div class="convert">
+        <div class="conv-card">
+          <h3>Note → Frequency</h3>
+          <div class="conv-inputs">
+            <select id="note-sel" aria-label="Note"></select>
+            <select id="oct-sel" aria-label="Octave"></select>
+          </div>
+          <div class="conv-out">
+            <span class="big" id="n2f-hz">440.00<span class="u">Hz</span></span>
+            <span class="sub" id="n2f-sub">MIDI 69 · A4</span>
+          </div>
+        </div>
+
+        <div class="conv-card">
+          <h3>Frequency → Note</h3>
+          <div class="conv-inputs">
+            <input type="number" id="hz-in" min="8" max="14000" step="0.01" value="440"
+                   inputmode="decimal" aria-label="Frequency in hertz">
+            <span class="unit" style="font-family:var(--mono);color:var(--muted);font-weight:700">Hz</span>
+          </div>
+          <div class="conv-out">
+            <span class="big" id="f2n-note">A4</span>
+            <span class="sub"><span id="f2n-cents" class="cents intune">in tune</span> · nearest note <span id="f2n-exact"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <table class="freq-table">
+          <caption id="chart-caption">Note frequencies in Hz, A4 = 440 Hz</caption>
+          <thead>
+            <tr id="chart-head"><!-- filled by JS --></tr>
+          </thead>
+          <tbody id="chart-rows"><!-- filled by JS --></tbody>
+        </table>
+      </div>
+      <p class="copy-hint">Tap any value to copy it to your clipboard.</p>
+
+      <div class="share" id="share" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.2rem;padding:0.85rem 1rem;background:var(--bg-elev-2);border:1px solid var(--border);border-radius:12px;">
+        <span class="share-bar__label">Working out a key?</span>
+        <div class="crosslinks">
+          <a class="chip" href="../chords/">♯ Chord &amp; Scale Explorer</a>
+          <a class="chip" href="../delay/">⏱ Delay &amp; Reverb Calculator</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="prose">
+      <h2>How note frequencies are calculated</h2>
+      <p>Western music uses <strong>twelve-tone equal temperament</strong>: the octave is split into twelve equal steps, and each step multiplies the frequency by the twelfth root of two (about 1.05946). Pin one note to a known frequency and every other note follows. The anchor is <strong>A&#8202;4 = 440&nbsp;Hz</strong>, concert pitch. Using MIDI note numbers (A4 = 69), the frequency of any note <em>n</em> is:</p>
+      <p style="font-family:var(--mono);background:var(--bg-elev-2);border:1px solid var(--border);border-radius:10px;padding:0.7rem 0.9rem;color:var(--accent-2)">f(n) = 440 × 2<sup>(n − 69) / 12</sup></p>
+      <p>That is why an octave <em>doubles</em> the frequency: A3 is 220&nbsp;Hz, A4 is 440&nbsp;Hz, A5 is 880&nbsp;Hz. Middle C (C4) lands on about 261.63&nbsp;Hz.</p>
+      <h2>Frequency to note &amp; cents</h2>
+      <p>Going the other way, a <strong>cent</strong> is one hundredth of a semitone, so 100&nbsp;cents is one half-step and 1200&nbsp;cents is an octave. Type any frequency above and the calculator finds the closest note, then tells you how many cents <span style="color:#ffb454">flat</span> or <span style="color:#ff8f8f">sharp</span> it sits — exactly what you need to check whether a sample, synth oscillator or recording is in tune.</p>
+      <h2>432 Hz, 442 Hz and other references</h2>
+      <p>Not everyone tunes to 440. Some prefer <strong>432&nbsp;Hz</strong> for a slightly darker, lower pitch; many orchestras tune sharp to <strong>442</strong> or <strong>443&nbsp;Hz</strong> for brilliance. Change the <strong>A&#8202;4 reference</strong> at the top and the entire chart and both converters retune instantly. Once you know your note, open the <a href="../chords/">Chord &amp; Scale Explorer</a> to build a progression around it, or the <a href="../delay/">Delay &amp; Reverb Calculator</a> to lock your effects to the tempo.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Made for producers, beatmakers &amp; bedroom musicians.</span>
+    <span><a href="../">More tools →</a></span>
+  </footer>
+
+  <script src="../assets/js/config.js"></script>
+  <script>window.ANALYTICS && (window.ANALYTICS.tool = 'note-frequency');</script>
+  <script defer src="../assets/js/analytics.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    // --- Equal-temperament core ---------------------------------------------
+    // MIDI note numbers: C-1 = 0, C0 = 12, middle C (C4) = 60, A4 = 69.
+    var NOTE_NAMES = ['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+    var MIN_OCT = 0, MAX_OCT = 8;            // chart range C0 .. B8
+    var A4_MIN = 400, A4_MAX = 480;
+
+    function midiFor(classIndex, octave) { return (octave + 1) * 12 + classIndex; }
+    function freqOf(midi, a4) { return a4 * Math.pow(2, (midi - 69) / 12); }
+
+    // Format a frequency: 2 decimals reads cleanly across the whole range
+    // (C0 = 16.35 Hz up to B8 = 7902.13 Hz) and matches the acceptance spec.
+    function fmtHz(f) {
+      if (!isFinite(f) || f <= 0) return '—';
+      return f.toFixed(2);
+    }
+
+    // --- Elements ------------------------------------------------------------
+    var a4El = document.getElementById('a4');
+    var presets = document.querySelectorAll('.preset-toggle button');
+    var noteSel = document.getElementById('note-sel');
+    var octSel = document.getElementById('oct-sel');
+    var n2fHz = document.getElementById('n2f-hz');
+    var n2fSub = document.getElementById('n2f-sub');
+    var hzIn = document.getElementById('hz-in');
+    var f2nNote = document.getElementById('f2n-note');
+    var f2nCents = document.getElementById('f2n-cents');
+    var f2nExact = document.getElementById('f2n-exact');
+    var headEl = document.getElementById('chart-head');
+    var rowsEl = document.getElementById('chart-rows');
+    var captionEl = document.getElementById('chart-caption');
+
+    function a4() {
+      var v = parseFloat(a4El.value);
+      return (isFinite(v) && v >= A4_MIN && v <= A4_MAX) ? v : 440;
+    }
+
+    // --- Populate the note / octave pickers ----------------------------------
+    NOTE_NAMES.forEach(function (n, i) {
+      var o = document.createElement('option');
+      o.value = String(i); o.textContent = n;
+      noteSel.appendChild(o);
+    });
+    for (var oc = MIN_OCT; oc <= MAX_OCT; oc++) {
+      var o = document.createElement('option');
+      o.value = String(oc); o.textContent = String(oc);
+      octSel.appendChild(o);
+    }
+    noteSel.value = '9';  // A
+    octSel.value = '4';   // octave 4  -> A4
+
+    // --- Note -> Frequency ---------------------------------------------------
+    function renderNote2Freq() {
+      var ci = parseInt(noteSel.value, 10);
+      var oc = parseInt(octSel.value, 10);
+      var midi = midiFor(ci, oc);
+      var f = freqOf(midi, a4());
+      n2fHz.innerHTML = fmtHz(f) + '<span class="u">Hz</span>';
+      n2fSub.textContent = 'MIDI ' + midi + ' · ' + NOTE_NAMES[ci] + oc;
+    }
+
+    // --- Frequency -> Note ---------------------------------------------------
+    function renderFreq2Note() {
+      var f = parseFloat(hzIn.value);
+      if (!isFinite(f) || f <= 0) {
+        f2nNote.textContent = '—';
+        f2nCents.textContent = ''; f2nCents.className = 'cents';
+        f2nExact.textContent = '';
+        return;
+      }
+      var m = 69 + 12 * (Math.log(f / a4()) / Math.LN2);
+      var nearest = Math.round(m);
+      var cents = (m - nearest) * 100;
+      var ci = ((nearest % 12) + 12) % 12;
+      var oc = Math.floor(nearest / 12) - 1;
+      f2nNote.textContent = NOTE_NAMES[ci] + oc;
+      var rounded = Math.round(cents);
+      if (rounded === 0) {
+        f2nCents.textContent = 'in tune';
+        f2nCents.className = 'cents intune';
+      } else if (rounded < 0) {
+        f2nCents.textContent = rounded + ' cents (flat)';
+        f2nCents.className = 'cents flat';
+      } else {
+        f2nCents.textContent = '+' + rounded + ' cents (sharp)';
+        f2nCents.className = 'cents sharp';
+      }
+      f2nExact.textContent = fmtHz(freqOf(nearest, a4())) + ' Hz';
+    }
+
+    // --- Full chart ----------------------------------------------------------
+    function renderChart() {
+      var head = '<th scope="col" style="text-align:left">Note</th>';
+      for (var oc = MIN_OCT; oc <= MAX_OCT; oc++) head += '<th scope="col">Oct ' + oc + '</th>';
+      headEl.innerHTML = head;
+
+      var ref = a4();
+      var html = '';
+      NOTE_NAMES.forEach(function (name, ci) {
+        var rowClass = (ci === 9) ? ' class="row-A"' : '';   // A row holds the reference
+        html += '<tr' + rowClass + '>';
+        html += '<th scope="row">' + name + '</th>';
+        for (var oc = MIN_OCT; oc <= MAX_OCT; oc++) {
+          var midi = midiFor(ci, oc);
+          var f = freqOf(midi, ref);
+          var v = fmtHz(f);
+          var isRef = (midi === 69);   // A4 cell
+          html += '<td><button class="val' + (isRef ? ' is-ref' : '') + '" type="button"'
+                + ' data-copy="' + v + '" title="' + name + oc + ' = ' + v + ' Hz">'
+                + v + '</button></td>';
+        }
+        html += '</tr>';
+      });
+      rowsEl.innerHTML = html;
+      captionEl.textContent = 'Note frequencies in Hz, A4 = '
+        + (Number.isInteger(ref) ? ref : ref.toFixed(1)) + ' Hz';
+    }
+
+    function renderAll() { renderNote2Freq(); renderFreq2Note(); renderChart(); }
+
+    // --- A4 preset buttons ---------------------------------------------------
+    function syncPresets() {
+      var v = a4();
+      presets.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(parseFloat(b.dataset.a4) === v));
+      });
+    }
+
+    presets.forEach(function (b) {
+      b.addEventListener('click', function () {
+        a4El.value = b.dataset.a4;
+        syncPresets();
+        renderAll();
+        if (window.track) window.track('notefreq_a4', b.dataset.a4);
+      });
+    });
+
+    a4El.addEventListener('input', function () { syncPresets(); renderAll(); });
+    noteSel.addEventListener('change', function () {
+      renderNote2Freq();
+      if (window.track) window.track('notefreq_note', NOTE_NAMES[parseInt(noteSel.value,10)] + octSel.value);
+    });
+    octSel.addEventListener('change', renderNote2Freq);
+    hzIn.addEventListener('input', renderFreq2Note);
+
+    // Copy a chart value on click; flash the button.
+    rowsEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.val');
+      if (!btn) return;
+      var v = btn.getAttribute('data-copy');
+      if (!v) return;
+      var done = function () {
+        btn.classList.add('copied');
+        setTimeout(function () { btn.classList.remove('copied'); }, 900);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(v).then(done, done);
+      } else { done(); }
+      if (window.track) window.track('notefreq_copy');
+    });
+
+    syncPresets();
+    renderAll();
+  })();
+  </script>
+</body>
+</html>
