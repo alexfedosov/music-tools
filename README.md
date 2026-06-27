@@ -1,4 +1,4 @@
-# music·tools
+# Pocket Tempo
 
 Free, fast, fun web tools for music makers. Static site, no build step, deployed to GitHub Pages.
 
