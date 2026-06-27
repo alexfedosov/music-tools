@@ -98,3 +98,57 @@ SELECT
    AND returning_views::numeric / nullif(known_views, 0) >= 0.20) AS pivot_signal
 FROM t
 ORDER BY pivot_signal DESC NULLS LAST, returning_pct DESC NULLS LAST, views DESC;
+
+
+-- 4. CHORD CO-PILOT KILL METRIC (CRA-34) — is it a CREATION tool, or a toy?
+--    The co-pilot (chords/, tool id 'chord-copilot') is the flagship "co-pilot"
+--    bet: encode harmony so a novice writes a progression they're proud to
+--    share. Visionary owns the threshold; the build emits the events so it's
+--    measurable from day one.
+--
+--    Events (overloaded event rows, path = '/e/<event>[/<detail>]'):
+--      chord_session          once/session on load   — the DENOMINATOR
+--      play_pressed           once/session on Play    — ACTIVATION numerator
+--      progression_completed  once/session, full loop — COMPLETION numerator
+--    The once-per-session rows carry NO detail, so path matches EXACTLY
+--    '/e/<event>' (the raw, detail-bearing rows like '/e/play_pressed/happy'
+--    are the per-mood breakdown in query 5 and are excluded here).
+--
+--    KILL CRITERIA (after ~2 weeks real traffic):
+--      activation (Play)        >= 40%   AND
+--      progression-complete     >= 15%
+--    else the co-pilot framing failed (used as a reference, not to create).
+WITH ev AS (
+  SELECT
+    count(*) FILTER (WHERE path = '/e/chord_session')         AS sessions,
+    count(*) FILTER (WHERE path = '/e/play_pressed')          AS activations,
+    count(*) FILTER (WHERE path = '/e/progression_completed')  AS completions
+  FROM page_views
+  WHERE created_at >= now() - interval '30 days'
+)
+SELECT
+  sessions,
+  activations,
+  completions,
+  round(100.0 * activations / nullif(sessions, 0), 1) AS activation_pct,
+  round(100.0 * completions / nullif(sessions, 0), 1) AS completion_pct,
+  (activations::numeric / nullif(sessions, 0) >= 0.40
+   AND completions::numeric / nullif(sessions, 0) >= 0.15) AS copilot_passes
+FROM ev;
+
+
+-- 5. CHORD CO-PILOT — engagement breakdown by mood + secondary events.
+--    Which moods get picked, and do people use Surprise / share / cross-nav?
+--    Reads the detail-bearing raw rows (e.g. '/e/play_pressed/happy').
+SELECT
+  split_part(path, '/', 3)               AS event,
+  coalesce(nullif(split_part(path, '/', 4), ''), '(all)') AS detail,
+  count(*)                               AS hits
+FROM page_views
+WHERE path LIKE '/e/%'
+  AND split_part(path, '/', 3) IN
+      ('play_pressed','progression_completed','surprise_me_used',
+       'share_copied','cross_nav_click','chord_session')
+  AND created_at >= now() - interval '30 days'
+GROUP BY 1, 2
+ORDER BY 1, hits DESC;

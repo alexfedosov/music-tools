@@ -1,0 +1,258 @@
+/* Chord Progression Co-pilot — tool-specific styles.
+ * Base layout/typography come from ../assets/css/site.css. Kept separate so the
+ * tool is self-contained. A few cross-tool helpers are restated defensively. */
+
+.cp {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.3rem 1.5rem;
+  box-shadow: 0 20px 50px -25px rgba(0,0,0,0.7);
+}
+
+.cp-section__label {
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+/* ── Mood buttons (primary entry) ─────────────────────────── */
+.cp-moods {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+}
+.cp-mood {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.85rem 0.4rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
+}
+.cp-mood { --feel-color: var(--accent); }
+.cp-mood:hover { border-color: var(--feel-color); }
+.cp-mood:active { transform: translateY(1px); }
+.cp-mood__emoji { font-size: 1.5rem; line-height: 1; }
+.cp-mood__label { font-size: 0.82rem; font-weight: 600; }
+.cp-mood.active {
+  border-color: var(--feel-color);
+  background: color-mix(in srgb, var(--feel-color) 16%, var(--bg-elev-2));
+  box-shadow: 0 0 0 1px var(--feel-color) inset;
+}
+
+/* ── 4-slot progression ───────────────────────────────────── */
+.cp-slots {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+.cp-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-height: 92px;
+  padding: 0.6rem 0.4rem;
+  border: 1px dashed var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.12s, box-shadow 0.12s, transform 0.06s, background 0.12s;
+}
+.cp-slot:hover { border-color: var(--accent-2); }
+.cp-slot.filled { border-style: solid; }
+.cp-slot.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+.cp-slot.playing {
+  background: color-mix(in srgb, var(--accent-2) 20%, var(--bg-elev-2));
+  border-color: var(--accent-2);
+  transform: scale(1.04);
+  box-shadow: 0 0 20px -4px var(--accent-2);
+}
+.cp-slot__plus { font-size: 1.7rem; color: var(--muted); line-height: 1; }
+.cp-slot__hint { font-size: 0.72rem; color: var(--muted); }
+.cp-slot__name { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+.cp-slot__roman { font-family: var(--mono); font-size: 0.8rem; color: var(--accent-2); }
+.cp-slot__fn {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* ── Transport ────────────────────────────────────────────── */
+.cp-transport {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.3rem;
+}
+.cp-play {
+  flex: none;
+  min-width: 116px;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+.cp-play.playing { background: var(--bg-elev-2); color: var(--text); border: 1px solid var(--border); }
+.cp-surprise {
+  flex: none;
+  padding: 0.8rem 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  cursor: pointer;
+}
+.cp-surprise:hover { border-color: var(--accent); }
+.cp-tempo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 160px;
+}
+.cp-tempo label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.cp-tempo input[type="range"] { flex: 1; accent-color: var(--accent); height: 6px; min-width: 0; }
+.cp-tempo__val { font-family: var(--mono); min-width: 5ch; text-align: right; font-weight: 600; }
+
+/* ── Palette ──────────────────────────────────────────────── */
+.cp-palette {
+  border-top: 1px solid var(--border);
+  padding-top: 1.1rem;
+}
+.cp-palette__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.cp-palette__title { font-weight: 700; font-size: 0.98rem; }
+.cp-clear {
+  flex: none;
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+.cp-clear:hover { color: var(--text); border-color: var(--accent); }
+
+.cp-chords {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.cp-rest {
+  margin-top: 0.55rem;
+  opacity: 0.92;
+}
+.cp-rest-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0.9rem 0 0.4rem;
+}
+
+.cp-chord {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12rem;
+  padding: 0.7rem 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: border-color 0.12s, transform 0.05s, box-shadow 0.12s;
+}
+.cp-chord:hover { border-color: var(--accent-2); }
+.cp-chord:active { transform: translateY(1px); }
+.cp-chord.suggested {
+  border-color: color-mix(in srgb, var(--accent-2) 55%, var(--border));
+  background: color-mix(in srgb, var(--accent-2) 10%, var(--bg-elev-2));
+}
+.cp-chord.chosen { box-shadow: 0 0 0 2px var(--accent) inset; border-color: var(--accent); }
+.cp-chord__rank {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-2);
+}
+.cp-chord__name { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+.cp-chord__fn {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+.cp-chord__roman { font-family: var(--mono); font-size: 0.74rem; color: var(--accent-2); }
+
+/* ── Key picker (secondary) + cross-nav ───────────────────── */
+.cp-keypick { margin-top: 1.2rem; }
+.cp-keypick summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+  list-style: none;
+}
+.cp-keypick summary::-webkit-details-marker { display: none; }
+.cp-keypick summary::before { content: '⚙ '; }
+.cp-keypick[open] summary { color: var(--text); }
+.cp-keypick__row {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 0.7rem;
+  flex-wrap: wrap;
+}
+.cp-keypick__row .field { flex: 1; min-width: 120px; }
+
+.cp-share {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+.cp-share__actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+@media (max-width: 480px) {
+  .cp-moods { grid-template-columns: repeat(5, 1fr); gap: 0.35rem; }
+  .cp-mood { padding: 0.7rem 0.2rem; }
+  .cp-mood__label { font-size: 0.72rem; }
+  .cp-slot { min-height: 80px; }
+  .cp-slot__name { font-size: 1.2rem; }
+}

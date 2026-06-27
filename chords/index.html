@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Chord &amp; Scale Explorer — Keys, Modes &amp; Diatonic Chords</title>
-  <meta name="description" content="Pick any key and scale or mode and instantly see the correct notes and diatonic chords — triads or 7ths — with roman numerals. Click any note or chord to hear it. Free, no signup.">
+  <title>Chord Progression Generator — Pick a Mood, Build a Progression</title>
+  <meta name="description" content="Pick a mood and build a chord progression that actually sounds good — even if you know zero music theory. Only in-key chords, ranked suggestions, one-click play. Free, no signup.">
   <link rel="canonical" href="https://pockettempo.xyz/chords/">
   <meta name="theme-color" content="#0e1014">
 
   <!-- Open Graph / social -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Pocket Tempo">
-  <meta property="og:title" content="Chord &amp; Scale Explorer — Keys, Modes &amp; Diatonic Chords">
-  <meta property="og:description" content="See the notes and diatonic chords of any key, scale, or mode. Click to hear them. Shareable, free, no signup.">
+  <meta property="og:title" content="Chord Progression Generator — Pick a Mood, Build a Progression">
+  <meta property="og:description" content="Pick a mood, get a chord progression that sounds good — no theory needed. Only in-key chords, ranked suggestions, one-click play. Shareable, free.">
   <meta property="og:url" content="https://pockettempo.xyz/chords/">
   <meta property="og:image" content="https://pockettempo.xyz/assets/og/chords.png">
   <meta property="og:image:width" content="1200">
@@ -22,29 +22,45 @@
 
   <link rel="preconnect" href="https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech" crossorigin>
   <link rel="stylesheet" href="../assets/css/site.css">
-  <link rel="stylesheet" href="explorer.css">
+  <link rel="stylesheet" href="copilot.css">
 
-  <!-- This page is a web app -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Chord & Scale Explorer",
+    "name": "Chord Progression Generator",
     "url": "https://pockettempo.xyz/chords/",
     "applicationCategory": "MultimediaApplication",
     "operatingSystem": "Any (web browser)",
-    "description": "Explore the notes and diatonic chords of any key, scale, or mode, with correct enharmonic spelling, roman numerals, and click-to-hear playback.",
+    "description": "A mood-first chord progression builder. Pick a mood, get a key and curated progressions, and only ever see in-key chords with ranked 'good next chord' suggestions. One-click playback with Web Audio.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
   }
   </script>
-  <!-- Breadcrumb: hub › this tool -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Pocket Tempo", "item": "https://pockettempo.xyz/" },
-      { "@type": "ListItem", "position": 2, "name": "Chord & Scale Explorer", "item": "https://pockettempo.xyz/chords/" }
+      { "@type": "ListItem", "position": 2, "name": "Chord Progression Generator", "item": "https://pockettempo.xyz/chords/" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I make a chord progression if I don't know music theory?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Pick a mood — Happy, Sad, Dreamy, Epic or Lo-fi. The tool chooses a key for you and only ever offers chords that are in that key, so you cannot pick a wrong one. For every slot it ranks the most likely good next chord, or hit Surprise me for a complete progression in one click." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a good 4-chord progression?",
+        "acceptedAnswer": { "@type": "Answer", "text": "I–V–vi–IV is the most common pop progression (happy and bright). vi–IV–I–V and I–vi–IV–V are close cousins. For a sad feel try i–VI–III–VII in a minor key. This tool bakes these expert defaults into its Surprise me button." }
+      }
     ]
   }
   </script>
@@ -57,53 +73,78 @@
 
   <main>
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Chord &amp; Scale Explorer</span>
+      <a href="../">All tools</a> <span aria-hidden="true">›</span> <span>Chord Progression Generator</span>
     </nav>
 
     <section class="hero">
-      <h1>Chord &amp; Scale Explorer</h1>
-      <p class="lede">Pick a key and a scale or mode. See the notes spelled correctly and every diatonic chord, then click anything to hear it. Share the URL to send someone the exact key you're working in.</p>
+      <h1>Chord Progression Generator</h1>
+      <p class="lede">Pick a mood and build a progression that actually sounds good — even with zero music theory. You only ever see chords that are in key, with the best next chord ranked for you. Hit play to hear it loop.</p>
     </section>
 
-    <section class="explorer" aria-label="Chord and scale explorer">
-      <div class="settings">
-        <div class="field">
-          <label for="root-select">Key / root</label>
-          <select id="root-select"></select>
+    <section class="cp" aria-label="Chord progression co-pilot">
+      <!-- 1. Mood-first entry -->
+      <h2 class="cp-section__label">Start with a mood</h2>
+      <div id="cp-moods" class="cp-moods" role="group" aria-label="Mood"></div>
+
+      <!-- 2. 4-slot progression -->
+      <h2 class="cp-section__label">Your progression</h2>
+      <div id="cp-slots" class="cp-slots" role="group" aria-label="Four chord slots"></div>
+
+      <!-- 3 + 4. Transport: play / surprise / tempo -->
+      <div class="cp-transport">
+        <button id="cp-play" class="cp-play" type="button">▶ Play</button>
+        <button id="cp-surprise" class="cp-surprise" type="button">🎲 Surprise me</button>
+        <div class="cp-tempo">
+          <label for="cp-bpm">Tempo</label>
+          <input id="cp-bpm" type="range" min="60" max="140" step="1" value="90" aria-label="Tempo in BPM">
+          <span class="cp-tempo__val"><span id="cp-bpm-val">90</span> BPM</span>
         </div>
-        <div class="field">
-          <label for="scale-select">Scale / mode</label>
-          <select id="scale-select"></select>
+      </div>
+
+      <!-- Palette for the active slot: ranked suggestions then the rest in-key -->
+      <div id="cp-palette" class="cp-palette" hidden>
+        <div class="cp-palette__head">
+          <span id="cp-palette-title" class="cp-palette__title">Choose a chord</span>
+          <button id="cp-clear" class="cp-clear" type="button" hidden>Clear slot</button>
         </div>
-        <div class="field checkbox">
-          <input type="checkbox" id="seventh-toggle">
-          <label for="seventh-toggle">7th chords</label>
+        <div id="cp-suggested" class="cp-chords"></div>
+        <p class="cp-rest-label">Other chords in this key</p>
+        <div id="cp-rest" class="cp-chords cp-rest"></div>
+      </div>
+
+      <!-- Secondary path: pick a key by hand -->
+      <details class="cp-keypick">
+        <summary>Know your key? Pick it yourself</summary>
+        <div class="cp-keypick__row">
+          <div class="field">
+            <label for="cp-key-root">Key / root</label>
+            <select id="cp-key-root"></select>
+          </div>
+          <div class="field">
+            <label for="cp-key-scale">Major or minor</label>
+            <select id="cp-key-scale">
+              <option value="major">Major</option>
+              <option value="minor">Minor</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 5. Share + cross-nav -->
+      <div class="cp-share">
+        <a id="cp-jam" class="chip" href="../metronome/?bpm=90">Jam at 90 BPM →</a>
+        <div class="cp-share__actions">
+          <a class="chip chip--tip" data-tip-jar href="#" target="_blank" rel="noopener" hidden>☕ Buy me a coffee</a>
+          <button id="cp-copy" class="chip" type="button" data-copy-link>Copy link to this progression</button>
         </div>
       </div>
-
-      <div class="scale-head">
-        <h2 id="scale-title">Scale</h2>
-        <p id="scale-formula" class="scale-formula"></p>
-      </div>
-
-      <div class="notes-block">
-        <h3 class="block-label">Notes</h3>
-        <div id="scale-notes" class="note-row" role="group" aria-label="Scale notes"></div>
-      </div>
-
-      <div class="chords-block">
-        <h3 class="block-label">Diatonic chords</h3>
-        <div id="chord-grid" class="chord-grid" role="group" aria-label="Diatonic chords"></div>
-      </div>
-
-      <p class="hint">Click a note or chord to hear it. Switch on <strong>7th chords</strong> for richer, jazzier voicings.</p>
     </section>
 
     <section class="prose">
-      <h2>What is a diatonic chord?</h2>
-      <p>Every major or minor key contains seven notes. If you build a chord on each of those notes using only notes from the scale — stacking every other note — you get that key's <strong>diatonic chords</strong>. They're the chords that naturally sound "in key", which is why most songs are built almost entirely from them. The roman numerals (I, ii, iii, IV, V, vi, vii°) are a key-independent way to talk about those chords, so a "I–V–vi–IV" progression means the same shape in any key.</p>
-      <h2>Scales, modes &amp; how to use this</h2>
-      <p>Choose a root and a scale or mode to see its notes spelled the way a musician would write them — C major reads C D E F G A B, never with a doubled letter. The seven church modes (Ionian through Locrian), plus harmonic and melodic minor, are all here. Flip on 7th chords to reveal the major-7, dominant-7, minor-7 and half-diminished colours that give a progression its mood. Found a key you like? The page URL updates as you go, so you can bookmark or share it. Need the exact pitch of a note? The <a href="../note-frequency/">Note &amp; Frequency Calculator</a> gives every note's frequency in Hz.</p>
+      <h2>How this works</h2>
+      <p>Most chord tools assume you already know harmony. This one doesn't. Pick a <strong>mood</strong> and we choose a key for you, then show <strong>only the chords that belong in that key</strong> — so you literally cannot pick a chord that clashes. For each slot we rank the <strong>most likely good next chord</strong>, the same moves that power thousands of songs, and label each chord by what it <em>does</em>: <strong>Home</strong> (rest), <strong>Lift</strong> (movement), <strong>Tension</strong> (wants to resolve), <strong>Emotional</strong> (colour). Press play and it loops as block chords, built live in your browser with the Web Audio API — no samples, no plugins.</p>
+      <h2>What's a good chord progression?</h2>
+      <p>The famous one is <strong>I–V–vi–IV</strong> — bright, hopeful, and everywhere in pop. Flip the order to <strong>vi–IV–I–V</strong> for something more wistful, or drop into a minor key with <strong>i–VI–III–VII</strong> for a sad or cinematic feel. Hit <strong>Surprise me</strong> to drop a complete, known-good progression into all four slots at once — the fastest way to go from blank page to "I made something." When you've got a loop you like, <a href="../metronome/">jam against the metronome</a> at the same tempo, name the exact notes with the <a href="../note-frequency/">Note &amp; Frequency Calculator</a>, or dig into every scale and mode in the <a href="explorer/">Chord &amp; Scale Explorer</a>.</p>
     </section>
   </main>
 
@@ -112,11 +153,13 @@
     <span><a href="../">More tools →</a></span>
   </footer>
 
-  <!-- Shared analytics config; tag this page view as the explorer. -->
+  <!-- Shared config; tag this page view as the co-pilot. -->
   <script src="../assets/js/config.js"></script>
-  <script>if (window.ANALYTICS) window.ANALYTICS.tool = 'chord-scale-explorer';</script>
+  <script>if (window.ANALYTICS) window.ANALYTICS.tool = 'chord-copilot';</script>
   <script src="../assets/js/theory.js"></script>
-  <script defer src="../assets/js/explorer.js"></script>
+  <script src="../assets/js/copilot-harmony.js"></script>
+  <script defer src="../assets/js/copilot.js"></script>
+  <script defer src="../assets/js/share.js"></script>
   <script defer src="../assets/js/analytics.js"></script>
 </body>
 </html>
