@@ -2,7 +2,7 @@
 
 Free, fast, fun web tools for music makers. Static site, no build step, deployed to GitHub Pages.
 
-**Live:** https://alexfedosov.github.io/music-tools/
+**Live:** https://pockettempo.xyz/
 
 ## Tools
 

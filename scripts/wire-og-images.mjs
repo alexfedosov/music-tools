@@ -10,7 +10,7 @@
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 
-const BASE = 'https://alexfedosov.github.io/music-tools';
+const BASE = 'https://pockettempo.xyz';
 const PAGES = [
   ['metronome/index.html', 'assets/og/metronome.png'],
   ['tap-tempo/index.html', 'assets/og/tap-tempo.png'],

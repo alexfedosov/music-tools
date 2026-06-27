@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://alexfedosov.github.io/music-tools/sitemap.xml
+Sitemap: https://pockettempo.xyz/sitemap.xml

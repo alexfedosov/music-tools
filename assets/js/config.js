@@ -11,7 +11,7 @@
  *         itself (e.g. window.ANALYTICS.tool = "hub") before analytics.js runs.
  */
 window.SITE = {
-  baseUrl: "https://alexfedosov.github.io/music-tools",
+  baseUrl: "https://pockettempo.xyz",
   // Set this to a Ko-fi / Buy Me a Coffee / GitHub Sponsors / PayPal.me URL to
   // switch the tip jar live everywhere. Leave empty to hide it.
   tipJarUrl: ""
