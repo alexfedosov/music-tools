@@ -18,15 +18,20 @@ window.SITE = {
 };
 
 window.ANALYTICS = {
-  // Re-enabled per CEO directive (CRA-37, 2026-06-27): analytics back on.
-  // The beacon POSTs a JWT (kid `analytics-697a7af8`, role `anonymous`) that the
-  // Neon Data API validates against our published JWKS at
-  // https://pockettempo.xyz/.well-known/jwks.json. That JWKS serves the matching
-  // public key and the `anonymous` DB role holds INSERT-only on page_views, so
-  // rows land as soon as the Data API's auth provider points at that JWKS URL.
-  // (If you ever see 400 "jwk not found", the Data API's JWKS provider has drifted
-  //  back to Neon Auth's URL — re-point it to the URL above; see CRA-37.)
-  enabled: true,
+  // DEFERRED per CEO directive — option A (CRA-37, 2026-06-27, board "configured
+  // with option A"): analytics restore is APPROVED but deliberately deferred until
+  // there's traffic to measure (curated SEO pages need a 2–8wk indexation window).
+  // `enabled: false` fully gates the beacon off (analytics.js short-circuits), so
+  // no page-view requests fire from any page. All wiring below is preserved intact.
+  //
+  // To re-enable on the unblock trigger (first SEO indexation / first organic
+  // sessions, watched by Visionary via CRA-28): flip this to `true` AND ensure the
+  // Neon Data API is reprovisioned with its JWKS provider pointed at our published
+  // JWKS (https://pockettempo.xyz/.well-known/jwks.json, kid `analytics-697a7af8`,
+  // role `anonymous`, INSERT-only on page_views). A live probe today returns 400
+  // "jwk not found" because the Data API verifies against Neon Auth's JWKS, so the
+  // beacon must NOT be turned on before that infra step lands (see CRA-37 steps).
+  enabled: false,
   endpoint: "https://ep-square-leaf-a6l5syhk.apirest.us-west-2.aws.neon.tech/neondb/rest/v1/page_views",
   token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFuYWx5dGljcy02OTdhN2FmOCJ9.eyJyb2xlIjoiYW5vbnltb3VzIiwic3ViIjoid2ViLWFub24iLCJpYXQiOjE3ODI0MzIwMDAsImV4cCI6MjA4Mjc1ODQwMH0.JgwYcark7kYMH-HQ6clyjED4ZY9IwfYL0LQIJAWL2pe2Q0Mt-RbGKtl33b_z4IOgfVtZhXPxKJMsZda6MZUvkbncItEakZOJvb_0h8sLnzCmbZcmIU69bnX3lSmlJHs_PP_cPCIXtUh1Fb_WayKcatR2oC_5FV-pYFRVV_TZ0LTo-DX-A7pRbPJgjNQaHzjmHlh42WvjQNMnZD3RgHR-Gfn5B0PFgHUK-xmqrbWFY8WqhfEdTyus8EKYk2bQrgkrBwvk5YuT-2Yfmlo0oUAgsmXKWG98Uw72P0Ape5Sb_L-F2PhD40Woq8KjROKcLkefPiNYkjkeyzZlwz7yKQqD8g"
 };
